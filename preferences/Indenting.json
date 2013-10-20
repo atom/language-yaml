@@ -1,0 +1,10 @@
+{
+  "name": "Indenting",
+  "scope": "source.yaml",
+  "settings": {
+    "decreaseIndentPattern": "^\\s+\\}$",
+    "disableIndentCorrections": true,
+    "increaseIndentPattern": "^\\s*.*(:|-) ?(&\\w+)?(\\{[^}\"']*|\\([^)\"']*)?$",
+    "indentOnPaste": "simple"
+  }
+}

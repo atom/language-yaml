@@ -1,0 +1,28 @@
+{
+  "contactEmailRot13": "ora@vapbzhzqrfvta.pbz",
+  "contactName": "Benjamin Jackson",
+  "description": "<a href=\"http://www.yaml.org/\">YAML</a> is a straightforward machine parsable data serialization format designed for human readability and interaction with scripting languages such as Perl and Python.",
+  "mainMenu": {
+    "items": [
+      "D9F46A3E-4F2A-11DA-AFF2-000A95AF0064",
+      "037242FC-9D77-46A6-94B8-865052595B5A",
+      "------------------------------------",
+      "331791FA-7335-45B9-865E-760D52294D01",
+      "D73CBC77-1692-4981-8C3E-6DCE63F6E2E2",
+      "------------------------------------",
+      "52CDBDBC-91B6-40DD-852A-C92D7D15D6F5"
+    ],
+    "submenus": {}
+  },
+  "name": "YAML",
+  "ordering": [
+    "D9F46A3E-4F2A-11DA-AFF2-000A95AF0064",
+    "B0C44228-4F1F-11DA-AFF2-000A95AF0064",
+    "EDFB82EE-8F5A-497F-8D53-38D4E7BD4F08",
+    "78CB70FF-5071-11DA-B402-000A95AF0064",
+    "037242FC-9D77-46A6-94B8-865052595B5A",
+    "331791FA-7335-45B9-865E-760D52294D01",
+    "D73CBC77-1692-4981-8C3E-6DCE63F6E2E2",
+    "52CDBDBC-91B6-40DD-852A-C92D7D15D6F5"
+  ]
+}

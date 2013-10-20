@@ -1,0 +1,8 @@
+{
+  "name": "Folding",
+  "scope": "source.yaml",
+  "settings": {
+    "foldingStartMarker": "^[^#]\\s*.*:(\\s*\\[?| &.+)?$",
+    "foldingStopMarker": "^\\s*$|^\\s*\\}|^\\s*\\]|^\\s*\\)"
+  }
+}

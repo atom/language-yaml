@@ -1,0 +1,9 @@
+{
+  "beforeRunningCommand": "nop",
+  "command": "#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby\n\nrequire \"yaml\"\nrequire \"pp\"\n\nputs \"#!/usr/bin/env ruby\\n\\n\"\nprint \"documents = \"\npp(YAML.load_stream(STDIN).documents)",
+  "input": "selection",
+  "keyEquivalent": "^H",
+  "name": "Convert Document / Selection to Ruby",
+  "output": "openAsNewDocument",
+  "scope": "source.yaml"
+}

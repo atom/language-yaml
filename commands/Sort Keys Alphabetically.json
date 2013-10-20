@@ -1,0 +1,9 @@
+{
+  "beforeRunningCommand": "nop",
+  "command": "#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby\nprint (s = STDIN.read).split(/^#{indent = s.scan(/^(\\s*)\\b/).flatten.first}(?=\\w)/).sort.join(indent)",
+  "input": "selection",
+  "keyEquivalent": "",
+  "name": "Sort Keys Alphabetically",
+  "output": "replaceSelectedText",
+  "scope": "source.yaml"
+}

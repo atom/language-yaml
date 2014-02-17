@@ -1,5 +1,5 @@
 {
-  "source.yaml": {
+  ".source.yaml": {
     "editor": {
       "increaseIndentPattern": "^\\s*.*(:|-) ?(&\\w+)?(\\{[^}\"']*|\\([^)\"']*)?$",
       "decreaseIndentPattern": "^\\s+\\}$"

@@ -1,0 +1,7 @@
+{
+  "source.yaml": {
+    "editor": {
+      "foldEndPattern": "^\\s*$|^\\s*\\}|^\\s*\\]|^\\s*\\)"
+    }
+  }
+}

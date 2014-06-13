@@ -63,7 +63,7 @@
         'name': 'punctuation.definition.string.end.yaml'
       '11':
         'name': 'string.unquoted.yaml'
-    'match': '(?:(?:(-\\s*)?(\\w+\\s*(:)))|(-))\\s*(?:((")[^"]*("))|((\')[^\']*(\'))|([^,{}&#\\[\\]]+))\\s*'
+    'match': '(?:(?:(-\\s*)?(\\w+\\s*(:)))|(-))\\s*(?:((")[^"]*("))|((\')[^\']*(\'))|([^{}&#\\[\\]]+))\\s*'
     'name': 'string.unquoted.yaml'
   }
   {

@@ -1,4 +1,4 @@
-# YAML language support in Atom
+# YAML language support in Atom [![Build Status](https://travis-ci.org/atom/language-yaml.svg?branch=master)](https://travis-ci.org/atom/language-yaml)
 
 Adds syntax highlighting to YAML files in Atom.
 

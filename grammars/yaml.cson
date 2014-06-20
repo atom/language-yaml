@@ -41,7 +41,8 @@
     'name': 'constant.numeric.yaml'
   }
   {
-    'captures':
+    'begin': '(?:(?:(-\\s*)?(\\w+\\s*(:)))|(-))\\s*'
+    'beginCaptures':
       '1':
         'name': 'punctuation.definition.entry.yaml'
       '2':
@@ -50,21 +51,19 @@
         'name': 'punctuation.separator.key-value.yaml'
       '4':
         'name': 'punctuation.definition.entry.yaml'
-      '5':
-        'name': 'string.quoted.double.yaml'
-      '6':
-        'name': 'punctuation.definition.string.begin.yaml'
-      '7':
-        'name': 'punctuation.definition.string.end.yaml'
-      '8':
-        'name': 'string.quoted.single.yaml'
-      '9':
-        'name': 'punctuation.definition.string.begin.yaml'
-      '10':
-        'name': 'punctuation.definition.string.end.yaml'
-      '11':
+    'end': '$'
+    'patterns': [
+      {
+        'include': '#double_quoted_string'
+      }
+      {
+        'include': '#single_quoted_string'
+      }
+      {
         'name': 'string.unquoted.yaml'
-    'match': '(?:(?:(-\\s*)?(\\w+\\s*(:)))|(-))\\s*(?:((")[^"]*("))|((\')[^\']*(\'))|([^{}&#\\[\\]]+))\\s*'
+        'match': '[^{}&#\\[\\]]+'
+      }
+    ]
     'name': 'string.unquoted.yaml'
   }
   {
@@ -101,42 +100,10 @@
     'name': 'variable.other.yaml'
   }
   {
-    'begin': '"'
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.string.begin.yaml'
-    'end': '"'
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.string.end.yaml'
-    'name': 'string.quoted.double.yaml'
-    'patterns': [
-      {
-        'include': '#escaped_char'
-      }
-      {
-        'include': '#erb'
-      }
-    ]
+    'include': '#double_quoted_string'
   }
   {
-    'begin': '\''
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.string.begin.yaml'
-    'end': '\''
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.string.end.yaml'
-    'name': 'string.quoted.single.yaml'
-    'patterns': [
-      {
-        'include': '#escaped_char'
-      }
-      {
-        'include': '#erb'
-      }
-    ]
+    'include': '#single_quoted_string'
   }
   {
     'begin': '`'
@@ -239,3 +206,39 @@
   'escaped_char':
     'match': '\\\\.'
     'name': 'constant.character.escape.yaml'
+  'double_quoted_string':
+    'begin': '"'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.yaml'
+    'end': '"'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.yaml'
+    'name': 'string.quoted.double.yaml'
+    'patterns': [
+      {
+        'include': '#escaped_char'
+      }
+      {
+        'include': '#erb'
+      }
+    ]
+  'single_quoted_string':
+    'begin': '\''
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.yaml'
+    'end': '\''
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.yaml'
+    'name': 'string.quoted.single.yaml'
+    'patterns': [
+      {
+        'include': '#escaped_char'
+      }
+      {
+        'include': '#erb'
+      }
+    ]

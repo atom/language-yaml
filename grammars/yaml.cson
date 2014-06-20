@@ -1,8 +1,9 @@
+'scopeName': 'source.yaml'
+'name': 'YAML'
 'fileTypes': [
   'yaml'
   'yml'
 ]
-'name': 'YAML'
 'patterns': [
   {
     'include': '#erb'
@@ -238,4 +239,3 @@
   'escaped_char':
     'match': '\\\\.'
     'name': 'constant.character.escape.yaml'
-'scopeName': 'source.yaml'

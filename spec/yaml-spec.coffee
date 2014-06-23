@@ -53,3 +53,12 @@ describe "YAML grammar", ->
         expect(tokens[5]).toEqual value: "escaped", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.single.yaml"]
         expect(tokens[6]).toEqual value: "\\'", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
         expect(tokens[7]).toEqual value: "'", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
+
+  it "parses the leading ! before values", ->
+    {tokens} = grammar.tokenizeLine("key:! 'hi'")
+    expect(tokens[0]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+    expect(tokens[1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[2]).toEqual value: "! ", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+    expect(tokens[3]).toEqual value: "'", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
+    expect(tokens[4]).toEqual value: "hi", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.single.yaml"]
+    expect(tokens[5]).toEqual value: "'", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.single.yaml",  "punctuation.definition.string.end.yaml"]

@@ -54,6 +54,10 @@
     'end': '$'
     'patterns': [
       {
+        'name': 'string.unquoted.yaml'
+        'match': '\\!\\s*'
+      }
+      {
         'include': '#double_quoted_string'
       }
       {

@@ -41,7 +41,7 @@
     'name': 'constant.numeric.yaml'
   }
   {
-    'begin': '(?:(?:(-\\s*)?(\\w+\\s*(:)))|(-))\\s*'
+    'begin': '(?:(?:(-\\s*)?(\\w+\\s*(:)))|(-))[ \t]*'
     'beginCaptures':
       '1':
         'name': 'punctuation.definition.entry.yaml'
@@ -65,7 +65,7 @@
       }
       {
         'name': 'string.unquoted.yaml'
-        'match': '[^{}&#\\[\\]]+'
+        'match': '[^{}&#\\[\\]\\n]+'
       }
     ]
     'name': 'string.unquoted.yaml'

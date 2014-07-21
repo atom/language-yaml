@@ -106,3 +106,30 @@ describe "YAML grammar", ->
     expect(lines[1][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
     expect(lines[1][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
     expect(lines[1][3]).toEqual value: "2nd", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+
+  it "parses comments at the end of lines", ->
+    lines = grammar.tokenizeLines """
+      first: 1 # foo
+      second: 2nd  #bar
+      third: "3"
+    """
+
+    expect(lines[0][0]).toEqual value: "first", scopes: ["source.yaml", "constant.numeric.yaml", "entity.name.tag.yaml"]
+    expect(lines[0][1]).toEqual value: ":", scopes: ["source.yaml", "constant.numeric.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+    expect(lines[0][2]).toEqual value: " 1 ", scopes: ["source.yaml", "constant.numeric.yaml"]
+    expect(lines[0][3]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+    expect(lines[0][4]).toEqual value: " foo", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
+
+    expect(lines[1][0]).toEqual value: "second", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+    expect(lines[1][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+    expect(lines[1][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
+    expect(lines[1][3]).toEqual value: "2nd  ", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+    expect(lines[1][4]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+    expect(lines[1][5]).toEqual value: "bar", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
+
+    expect(lines[2][0]).toEqual value: "third", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+    expect(lines[2][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+    expect(lines[2][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
+    expect(lines[2][3]).toEqual value: "\"", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.double.yaml", "punctuation.definition.string.begin.yaml"]
+    expect(lines[2][4]).toEqual value: "3", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.double.yaml"]
+    expect(lines[2][5]).toEqual value: "\"", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]

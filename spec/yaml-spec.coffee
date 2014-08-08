@@ -107,6 +107,23 @@ describe "YAML grammar", ->
     expect(lines[1][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
     expect(lines[1][3]).toEqual value: "2nd", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
 
+  it "parses comments at the beginning of lines", ->
+    lines = grammar.tokenizeLines """
+      # first: 1
+        # second
+      ##
+    """
+
+    expect(lines[0][0]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+    expect(lines[0][1]).toEqual value: " first: 1", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
+
+    expect(lines[1][0]).toEqual value: "  ", scopes: ["source.yaml", "punctuation.whitespace.comment.leading.yaml"]
+    expect(lines[1][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+    expect(lines[1][2]).toEqual value: " second", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
+
+    expect(lines[2][0]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+    expect(lines[2][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
+
   it "parses comments at the end of lines", ->
     lines = grammar.tokenizeLines """
       first: 1 # foo

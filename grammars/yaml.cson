@@ -145,7 +145,7 @@
     'name': 'invalid.deprecated.trailing-whitespace.yaml'
   }
   {
-    'begin': '(^[ \\t]+)?(?<!\\$)(?=#)(?!#\\{)'
+    'begin': '(^[ \\t]+)?(?<!\\$)(?<=^|[ \\t])(?=#)(?!#\\{)'
     'beginCaptures':
       '1':
         'name': 'punctuation.whitespace.comment.leading.yaml'

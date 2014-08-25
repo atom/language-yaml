@@ -98,6 +98,7 @@ describe "YAML grammar", ->
     lines = grammar.tokenizeLines """
       first: 1st
       second: 2nd
+      third: th{ree}
     """
 
     expect(lines[0][0]).toEqual value: "first", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
@@ -109,6 +110,11 @@ describe "YAML grammar", ->
     expect(lines[1][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
     expect(lines[1][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
     expect(lines[1][3]).toEqual value: "2nd", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+
+    expect(lines[2][0]).toEqual value: "third", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+    expect(lines[2][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+    expect(lines[2][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
+    expect(lines[2][3]).toEqual value: "th{ree}", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
 
   it "parses comments at the beginning of lines", ->
     lines = grammar.tokenizeLines """
@@ -132,6 +138,7 @@ describe "YAML grammar", ->
       first: 1 # foo
       second: 2nd  #bar
       third: "3"
+      fourth: four#
     """
 
     expect(lines[0][0]).toEqual value: "first", scopes: ["source.yaml", "constant.numeric.yaml", "entity.name.tag.yaml"]
@@ -153,6 +160,11 @@ describe "YAML grammar", ->
     expect(lines[2][3]).toEqual value: "\"", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.double.yaml", "punctuation.definition.string.begin.yaml"]
     expect(lines[2][4]).toEqual value: "3", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.double.yaml"]
     expect(lines[2][5]).toEqual value: "\"", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]
+
+    expect(lines[3][0]).toEqual value: "fourth", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+    expect(lines[3][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+    expect(lines[3][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
+    expect(lines[3][3]).toEqual value: "four#", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
 
   it "parses colons in key names", ->
     lines = grammar.tokenizeLines """

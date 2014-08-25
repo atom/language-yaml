@@ -65,7 +65,7 @@
       }
       {
         'name': 'string.unquoted.yaml'
-        'match': '[^{}&#\\[\\]\\n]+'
+        'match': '[^"\'#\\n]([^#\\n]|((?<!\\s)#))*'
       }
     ]
     'name': 'string.unquoted.yaml'

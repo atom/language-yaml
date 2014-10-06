@@ -1,6 +1,8 @@
 'scopeName': 'source.yaml'
 'name': 'YAML'
 'fileTypes': [
+  'eyaml'
+  'eyml'
   'yaml'
   'yml'
 ]

@@ -6,6 +6,7 @@
   'yaml'
   'yml'
 ]
+'firstLineMatch': '^#cloud-config'
 'patterns': [
   {
     'include': '#erb'

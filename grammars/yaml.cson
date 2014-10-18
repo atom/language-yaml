@@ -21,7 +21,7 @@
         'name': 'entity.name.tag.yaml'
       '5':
         'name': 'punctuation.separator.key-value.yaml'
-    'end': '^(?!^\\1)|^(?=\\1(-|\\w+\\s*:)|#)'
+    'end': '^(?!\\1\\s+)(?=\\s*(-|\\w+\\s*:)|#)'
     'name': 'string.unquoted.block.yaml'
     'patterns': [
       {

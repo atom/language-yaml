@@ -12,6 +12,13 @@ describe "YAML grammar", ->
     expect(grammar).toBeTruthy()
     expect(grammar.scopeName).toBe "source.yaml"
 
+  it "selects the grammar for cloud config files", ->
+    waitsForPromise ->
+      atom.workspace.open('init.cloud')
+
+    runs ->
+      expect(atom.workspace.getActiveTextEditor().getGrammar()).toBe grammar
+
   describe "strings", ->
     describe "double quoted", ->
       it "parses escaped quotes", ->

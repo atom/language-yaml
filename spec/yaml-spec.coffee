@@ -163,6 +163,25 @@ describe "YAML grammar", ->
           expect(lines[5][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
           expect(lines[5][3]).toEqual value: "hi", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
 
+        it "ending with an indented comment", ->
+          lines = grammar.tokenizeLines """
+          root:
+            key: |
+              content here
+
+              second line
+            # hi
+          """
+          expect(lines[1][1]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
+          expect(lines[1][2]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+          expect(lines[1][3]).toEqual value: " |", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[2][0]).toEqual value: "    content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[3][0]).toEqual value: "", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[4][0]).toEqual value: "    second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[5][0]).toEqual value: "  ", scopes: ["source.yaml", "punctuation.whitespace.comment.leading.yaml"]
+          expect(lines[5][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+          expect(lines[5][2]).toEqual value: " hi", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
+
   it "parses the leading ! before values", ->
     {tokens} = grammar.tokenizeLine("key: ! 'hi'")
     expect(tokens[0]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]

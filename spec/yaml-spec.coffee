@@ -63,6 +63,106 @@ describe "YAML grammar", ->
         expect(tokens[7]).toEqual value: "\\'", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
         expect(tokens[8]).toEqual value: "'", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
 
+    describe "text blocks", ->
+      it "parses simple content", ->
+        lines = grammar.tokenizeLines """
+        key: |
+          content here
+          second line
+        """
+        expect(lines[0][0]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
+        expect(lines[0][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+        expect(lines[1][0]).toEqual value: "  content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[2][0]).toEqual value: "  second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+
+      it "parses content with empty lines", ->
+        lines = grammar.tokenizeLines """
+        key: |
+          content here
+
+          second line
+        """
+        expect(lines[0][0]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
+        expect(lines[0][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+        expect(lines[1][0]).toEqual value: "  content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[2][0]).toEqual value: "", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[3][0]).toEqual value: "  second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+
+      describe "parses content with unindented empty lines", ->
+        it "ending the content", ->
+          lines = grammar.tokenizeLines """
+          key: |
+            content here
+
+            second line
+          """
+          expect(lines[0][0]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
+          expect(lines[0][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+          expect(lines[0][2]).toEqual value: " |", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[1][0]).toEqual value: "  content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[2][0]).toEqual value: "", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[3][0]).toEqual value: "  second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+
+        it "ending with new element", ->
+          lines = grammar.tokenizeLines """
+          key: |
+            content here
+
+            second line
+          other: hi
+          """
+          expect(lines[0][0]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
+          expect(lines[0][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+          expect(lines[0][2]).toEqual value: " |", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[1][0]).toEqual value: "  content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[2][0]).toEqual value: "", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[3][0]).toEqual value: "  second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[4][0]).toEqual value: "other", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+          expect(lines[4][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+          expect(lines[4][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
+          expect(lines[4][3]).toEqual value: "hi", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+
+        it "ending with new element, part of list", ->
+          lines = grammar.tokenizeLines """
+           - key: |
+               content here
+
+               second line
+           - other: hi
+          """
+          expect(lines[0][0]).toEqual value: "- ", scopes: ["source.yaml", "string.unquoted.block.yaml", "punctuation.definition.entry.yaml"]
+          expect(lines[0][1]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
+          expect(lines[0][2]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+          expect(lines[0][3]).toEqual value: " |", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[1][0]).toEqual value: "    content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[2][0]).toEqual value: "", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[3][0]).toEqual value: "    second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[4][0]).toEqual value: "- ", scopes: ["source.yaml", "string.unquoted.yaml", "punctuation.definition.entry.yaml"]
+          expect(lines[4][1]).toEqual value: "other", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+          expect(lines[4][2]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+          expect(lines[4][3]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
+          expect(lines[4][4]).toEqual value: "hi", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+
+        it "ending with twice unindented new element", ->
+          lines = grammar.tokenizeLines """
+          root:
+            key: |
+              content here
+
+              second line
+          other: hi
+          """
+          expect(lines[1][1]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
+          expect(lines[1][2]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+          expect(lines[1][3]).toEqual value: " |", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[2][0]).toEqual value: "    content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[3][0]).toEqual value: "", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[4][0]).toEqual value: "    second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+          expect(lines[5][0]).toEqual value: "other", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+          expect(lines[5][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+          expect(lines[5][2]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
+          expect(lines[5][3]).toEqual value: "hi", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+
   it "parses the leading ! before values", ->
     {tokens} = grammar.tokenizeLine("key: ! 'hi'")
     expect(tokens[0]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]

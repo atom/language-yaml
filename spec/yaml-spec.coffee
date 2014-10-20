@@ -14,7 +14,7 @@ describe "YAML grammar", ->
 
   it "selects the grammar for cloud config files", ->
     waitsForPromise ->
-      atom.workspace.open('init.cloud')
+      atom.workspace.open('cloud.config')
 
     runs ->
       expect(atom.workspace.getActiveTextEditor().getGrammar()).toBe grammar

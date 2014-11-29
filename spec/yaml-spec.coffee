@@ -6,7 +6,7 @@ describe "YAML grammar", ->
       atom.packages.activatePackage("language-yaml")
 
     runs ->
-      grammar = atom.syntax.grammarForScopeName('source.yaml')
+      grammar = atom.grammars.grammarForScopeName('source.yaml')
 
   it "parses the grammar", ->
     expect(grammar).toBeTruthy()

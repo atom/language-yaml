@@ -12,7 +12,7 @@
     'include': '#erb'
   }
   {
-    'begin': '^(\\s*)(?:(-)|(?:(-\\s*)?(\\w+\\s*(:))))\\s*(\\||>)'
+    'begin': '^(\\s*)(?:(-)|(?:(-\\s*)?(\\S+\\s*(:))))\\s*(\\||>)'
     'beginCaptures':
       '2':
         'name': 'punctuation.definition.entry.yaml'
@@ -22,7 +22,7 @@
         'name': 'entity.name.tag.yaml'
       '5':
         'name': 'punctuation.separator.key-value.yaml'
-    'end': '^((?=\\s*#)|(?!\\1\\s+)(?=\\s*(-|\\w+\\s*:)|#))'
+    'end': '^((?=\\s*#)|(?!\\1\\s+)(?=\\s*(-|\\S+\\s*:)|#))'
     'name': 'string.unquoted.block.yaml'
     'patterns': [
       {

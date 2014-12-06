@@ -211,7 +211,7 @@
       }
     ]
   'escaped_char':
-    'match': '\\\\.'
+    'match': '[^"]'
     'name': 'constant.character.escape.yaml'
   'double_quoted_string':
     'begin': '"'

@@ -5,6 +5,7 @@
   'eyml'
   'yaml'
   'yml'
+  'sls'
 ]
 'firstLineMatch': '^#cloud-config'
 'patterns': [

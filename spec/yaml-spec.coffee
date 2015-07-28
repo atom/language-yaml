@@ -99,26 +99,20 @@ describe "YAML grammar", ->
         expect(lines[1][0]).toEqual value: "  content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
         expect(lines[2][0]).toEqual value: "  second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
 
-      it "properly parses comments in blocks", ->
+      it "properly parses through pound signs in blocks", ->
         lines = grammar.tokenizeLines """
         key: |
-          # this is a legit comment
-          no highlights
-        key: |
+          # this is not a legit comment
+          unquoted block
           ### this is just a markdown header
-          second line
+          another unquoted block
         """
         expect(lines[0][0]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
         expect(lines[0][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
-        expect(lines[1][0]).toEqual value: "  ", scopes: ["source.yaml", "punctuation.whitespace.comment.leading.yaml"]
-        expect(lines[1][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
-        expect(lines[1][2]).toEqual value: " this is a legit comment", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
-        expect(lines[2][0]).toEqual value: "  no highlights", scopes: ["source.yaml"]
-
-        expect(lines[3][0]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
-        expect(lines[3][1]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
-        expect(lines[4][0]).toEqual value: "  ### this is just a markdown header", scopes: ["source.yaml", "string.unquoted.block.yaml"]
-        expect(lines[5][0]).toEqual value: "  second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[1][0]).toEqual value: "  # this is not a legit comment", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[2][0]).toEqual value: "  unquoted block", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[3][0]).toEqual value: "  ### this is just a markdown header", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[4][0]).toEqual value: "  another unquoted block", scopes: ["source.yaml", "string.unquoted.block.yaml"]
 
       describe "parses content with unindented empty lines", ->
         it "ending the content", ->

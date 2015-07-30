@@ -13,17 +13,32 @@
     'include': '#erb'
   }
   {
-    'begin': '^(\\s*)(?:(-)|(?:(-\\s*)?(\\S+\\s*(:))))\\s*(\\||>)'
+    'begin': '^(\\s*)(?!-\\s*)(\\S+\\s*(:))\\s*(\\||>)'
+    'beginCaptures':
+      '2':
+        'name': 'entity.name.tag.yaml'
+      '3':
+        'name': 'punctuation.separator.key-value.yaml'
+    'end': '^(?!\\1\\s+)(?=\\s*(-|\\S+\\s*:|#))'
+    'name': 'string.unquoted.block.yaml'
+    'patterns': [
+      {
+        'include': '#erb'
+      }
+    ]
+  }
+  {
+    'begin': '^(\\s*)(?:(-)|(?:(-(\\s*))?(\\S+\\s*(:))))\\s*(\\||>)'
     'beginCaptures':
       '2':
         'name': 'punctuation.definition.entry.yaml'
       '3':
         'name': 'punctuation.definition.entry.yaml'
-      '4':
-        'name': 'entity.name.tag.yaml'
       '5':
+        'name': 'entity.name.tag.yaml'
+      '6':
         'name': 'punctuation.separator.key-value.yaml'
-    'end': '^(?!\\1\\s+)(?=\\s*(-|\\S+\\s*:|#))'
+    'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|\\S+\\s*:|#))'
     'name': 'string.unquoted.block.yaml'
     'patterns': [
       {

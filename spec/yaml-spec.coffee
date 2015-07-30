@@ -114,6 +114,24 @@ describe "YAML grammar", ->
         expect(lines[3][0]).toEqual value: "  ### this is just a markdown header", scopes: ["source.yaml", "string.unquoted.block.yaml"]
         expect(lines[4][0]).toEqual value: "  another unquoted block", scopes: ["source.yaml", "string.unquoted.block.yaml"]
 
+      it "parses keys following blocks in sequences", ->
+        lines = grammar.tokenizeLines """
+        - textblock: >
+            multiline
+            text
+          key: following text
+        """
+        expect(lines[0][0]).toEqual value: "- ", scopes: ["source.yaml", "string.unquoted.block.yaml", "punctuation.definition.entry.yaml"]
+        expect(lines[0][1]).toEqual value: "textblock", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
+        expect(lines[0][2]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+        expect(lines[1][0]).toEqual value: "    multiline", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[2][0]).toEqual value: "    text", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[3][0]).toEqual value: "  ", scopes: ["source.yaml"]
+        expect(lines[3][1]).toEqual value: "key", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+        expect(lines[3][2]).toEqual value: ":", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
+        expect(lines[3][3]).toEqual value: " ", scopes: ["source.yaml", "string.unquoted.yaml"]
+        expect(lines[3][4]).toEqual value: "following text", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+
       describe "parses content with unindented empty lines", ->
         it "ending the content", ->
           lines = grammar.tokenizeLines """

@@ -13,6 +13,10 @@
     'include': '#erb'
   }
   {
+    'match': '\\t+'
+    'name': 'invalid.illegal.whitespace.yaml'
+  }
+  {
     'begin': '^(\\s*)(?!-\\s*)(\\S+\\s*(:))\\s*(\\||>)'
     'beginCaptures':
       '2':

@@ -20,7 +20,7 @@
       '3':
         'name': 'punctuation.separator.key-value.yaml'
     'end': '^(?!\\1\\s+)(?=\\s*(-|\\S+\\s*:|#))'
-    'name': 'string.unquoted.block.yaml'
+    'contentName': 'string.unquoted.block.yaml'
     'patterns': [
       {
         'include': '#erb'
@@ -39,7 +39,7 @@
       '6':
         'name': 'punctuation.separator.key-value.yaml'
     'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|\\S+\\s*:|#))'
-    'name': 'string.unquoted.block.yaml'
+    'contentName': 'string.unquoted.block.yaml'
     'patterns': [
       {
         'include': '#erb'
@@ -87,7 +87,6 @@
         'match': '[^"\'#\\n]([^#\\n]|((?<!\\s)#))*'
       }
     ]
-    'name': 'string.unquoted.yaml'
   }
   {
     'captures':

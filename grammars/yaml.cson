@@ -6,6 +6,7 @@
   'yaml'
   'yml'
   'sls'
+  'sublime-syntax'
 ]
 'firstLineMatch': '^#cloud-config'
 'patterns': [

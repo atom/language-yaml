@@ -1,16 +1,22 @@
 'scopeName': 'source.yaml'
 'name': 'YAML'
 'fileTypes': [
+  'eslintrc'
   'eyaml'
   'eyml'
   'yaml'
   'yml'
   'sls'
+  'sublime-syntax'
 ]
 'firstLineMatch': '^#cloud-config'
 'patterns': [
   {
     'include': '#erb'
+  }
+  {
+    'match': '\\t+'
+    'name': 'invalid.illegal.whitespace.yaml'
   }
   {
     'begin': '^(\\s*)(?!-\\s*)(\\S+\\s*(:))\\s*(\\||>)'

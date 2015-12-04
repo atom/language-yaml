@@ -397,3 +397,8 @@ describe "YAML grammar", ->
     expect(lines[2][3]).toEqual value: "\"", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.double.yaml", "punctuation.definition.string.begin.yaml"]
     expect(lines[2][4]).toEqual value: "3", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.double.yaml"]
     expect(lines[2][5]).toEqual value: "\"", scopes: ["source.yaml", "string.unquoted.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]
+
+  describe "tabs", ->
+    it "marks them as invalid", ->
+      {tokens} = grammar.tokenizeLine "\t\ttabs:"
+      expect(tokens[0]).toEqual value: '\t\t', scopes: ['source.yaml', 'invalid.illegal.whitespace.yaml']

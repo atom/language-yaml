@@ -8,6 +8,7 @@
   'yml'
   'sls'
   'sublime-syntax'
+  'Boxfile'
 ]
 'firstLineMatch': '^#cloud-config'
 'patterns': [

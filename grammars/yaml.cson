@@ -1,6 +1,7 @@
 'scopeName': 'source.yaml'
 'name': 'YAML'
 'fileTypes': [
+  'clang-format'
   'eslintrc'
   'eyaml'
   'eyml'

@@ -9,6 +9,7 @@
   'sls'
   'sublime-syntax'
   'Boxfile'
+  'clang-format'
 ]
 'firstLineMatch': '^#cloud-config'
 'patterns': [

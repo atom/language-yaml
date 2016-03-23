@@ -1,6 +1,7 @@
 'scopeName': 'source.yaml'
 'name': 'YAML'
 'fileTypes': [
+  'clang-format'
   'eslintrc'
   'eyaml'
   'eyml'
@@ -9,7 +10,6 @@
   'sls'
   'sublime-syntax'
   'Boxfile'
-  'clang-format'
 ]
 'firstLineMatch': '^#cloud-config'
 'patterns': [

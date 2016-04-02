@@ -26,7 +26,7 @@
         'name': 'entity.name.tag.yaml'
       '3':
         'name': 'punctuation.separator.key-value.yaml'
-    'end': '^(?!\\1\\s+)(?=\\s*(-|\\S+\\s*:|#))'
+    'end': '^(?!\\1\\s+)(?=\\s*(-|[^!@#%&*>,].*:|#))'
     'name': 'string.unquoted.block.yaml'
     'patterns': [
       {
@@ -45,7 +45,7 @@
         'name': 'entity.name.tag.yaml'
       '6':
         'name': 'punctuation.separator.key-value.yaml'
-    'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|\\S+\\s*:|#))'
+    'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|[^!@#%&*>,].*:|#))'
     'name': 'string.unquoted.block.yaml'
     'patterns': [
       {

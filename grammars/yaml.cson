@@ -31,6 +31,9 @@
     'name': 'string.unquoted.block.yaml'
     'patterns': [
       {
+        'include': '#constants'
+      }
+      {
         'include': '#erb'
       }
     ]
@@ -49,6 +52,9 @@
     'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|\\S+\\s*:|#))'
     'name': 'string.unquoted.block.yaml'
     'patterns': [
+      {
+        'include': '#constants'
+      }
       {
         'include': '#erb'
       }
@@ -83,6 +89,9 @@
       {
         'name': 'string.unquoted.yaml'
         'match': '\\!\\s*'
+      }
+      {
+        'include': '#constants'
       }
       {
         'include': '#double_quoted_string'
@@ -209,6 +218,9 @@
   }
 ]
 'repository':
+  'constants':
+    'match': '(?<=\\s)(true|false|null)(?=\\s*$)'
+    'name': 'constant.language.yaml'
   'erb':
     'begin': '<%+(?!>)=?'
     'beginCaptures':

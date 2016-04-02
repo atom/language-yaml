@@ -78,15 +78,15 @@
         'name': 'punctuation.separator.key-value.yaml'
       '4':
         'name': 'punctuation.definition.entry.yaml'
-    'end': '(?=^\\s*(-|(\\S+\\s*)*:))'
+    'end': '(?=^\\s*(-|[^!@#%&*>,].*:))'
     'patterns': [
       {
-        'match': '(?<=\\s)(#(.*))'
+        'match': '(?<=\\s)((#).*)'
         'captures':
           '1':
-            'name': 'punctuation.definition.comment.yaml'
-          '2':
             'name': 'comment.line.number-sign.yaml'
+          '2':
+            'name': 'punctuation.definition.comment.yaml'
       }
       {
         'match': '\\!\\s*'

@@ -81,7 +81,7 @@
     'end': '(?=^\\s*(-|[^!@#%&*>,].*:))'
     'patterns': [
       {
-        'match': '(?<=\\s)((#).*)'
+        'match': '(?<=^|\\s)((#).*)'
         'captures':
           '1':
             'name': 'comment.line.number-sign.yaml'

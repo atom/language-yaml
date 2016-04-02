@@ -119,7 +119,7 @@ describe "YAML grammar", ->
         - textblock: >
             multiline
             text
-          key: following text
+          key with spaces: following text
         """
         expect(lines[0][0]).toEqual value: "- ", scopes: ["source.yaml", "string.unquoted.block.yaml", "punctuation.definition.entry.yaml"]
         expect(lines[0][1]).toEqual value: "textblock", scopes: ["source.yaml", "string.unquoted.block.yaml", "entity.name.tag.yaml"]
@@ -127,7 +127,7 @@ describe "YAML grammar", ->
         expect(lines[1][0]).toEqual value: "    multiline", scopes: ["source.yaml", "string.unquoted.block.yaml"]
         expect(lines[2][0]).toEqual value: "    text", scopes: ["source.yaml", "string.unquoted.block.yaml"]
         expect(lines[3][0]).toEqual value: "  ", scopes: ["source.yaml"]
-        expect(lines[3][1]).toEqual value: "key", scopes: ["source.yaml", "entity.name.tag.yaml"]
+        expect(lines[3][1]).toEqual value: "key with spaces", scopes: ["source.yaml", "entity.name.tag.yaml"]
         expect(lines[3][2]).toEqual value: ":", scopes: ["source.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
         expect(lines[3][3]).toEqual value: " ", scopes: ["source.yaml"]
         expect(lines[3][4]).toEqual value: "following text", scopes: ["source.yaml", "string.unquoted.yaml"]
@@ -355,6 +355,23 @@ describe "YAML grammar", ->
     expect(lines[3][1]).toEqual value: ":", scopes: ["source.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
     expect(lines[3][2]).toEqual value: " ", scopes: ["source.yaml"]
     expect(lines[3][3]).toEqual value: "four#", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+    lines = grammar.tokenizeLines """
+      multiline: # comment!
+        This should still be a string # another comment!
+        Ditto
+        # Guess what this is
+        String
+      # comment
+    """
+
+    expect(lines[0][3]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+    expect(lines[1][0]).toEqual value: "  This should still be a string ", scopes: ["source.yaml", "string.unquoted.yaml"]
+    expect(lines[1][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+    expect(lines[2][0]).toEqual value: "  Ditto", scopes: ["source.yaml", "string.unquoted.yaml"]
+    expect(lines[3][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+    expect(lines[4][0]).toEqual value: "  String", scopes: ["source.yaml", "string.unquoted.yaml"]
+    expect(lines[5][0]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
 
   it "parses colons in key names", ->
     lines = grammar.tokenizeLines """

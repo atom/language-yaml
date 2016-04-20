@@ -435,6 +435,27 @@ describe "YAML grammar", ->
     expect(lines[2][4]).toEqual value: "3", scopes: ["source.yaml", "string.quoted.double.yaml"]
     expect(lines[2][5]).toEqual value: "\"", scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]
 
+  describe "constants", ->
+    it "tokenizes true, false, and null as constants", ->
+      {tokens} = grammar.tokenizeLine "key: true"
+      expect(tokens[3]).toEqual value: "true", scopes: ["source.yaml", "string.unquoted.yaml", "constant.language.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: false"
+      expect(tokens[3]).toEqual value: "false", scopes: ["source.yaml", "string.unquoted.yaml", "constant.language.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: null"
+      expect(tokens[3]).toEqual value: "null", scopes: ["source.yaml", "string.unquoted.yaml", "constant.language.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: true$"
+      expect(tokens[3]).toEqual value: "true$", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: true false"
+      expect(tokens[3]).toEqual value: "true false", scopes: ["source.yaml", "string.unquoted.yaml", "string.unquoted.yaml"]
+
+    it "does not tokenize keys as constants", ->
+      {tokens} = grammar.tokenizeLine "true: something"
+      expect(tokens[0]).toEqual value: "true", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
+
   describe "tabs", ->
     it "marks them as invalid", ->
       {tokens} = grammar.tokenizeLine "\t\ttabs:"

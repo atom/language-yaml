@@ -1,6 +1,7 @@
 'scopeName': 'source.yaml'
 'name': 'YAML'
 'fileTypes': [
+  'clang-format'
   'eslintrc'
   'eyaml'
   'eyml'
@@ -30,6 +31,9 @@
     'contentName': 'string.unquoted.block.yaml'
     'patterns': [
       {
+        'include': '#constants'
+      }
+      {
         'include': '#erb'
       }
     ]
@@ -48,6 +52,9 @@
     'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|[^!@#%&*>,].*:|#))'
     'contentName': 'string.unquoted.block.yaml'
     'patterns': [
+      {
+        'include': '#constants'
+      }
       {
         'include': '#erb'
       }
@@ -91,6 +98,9 @@
       {
         'match': '\\!\\s*'
         'name': 'string.unquoted.yaml'
+      }
+      {
+        'include': '#constants'
       }
       {
         'include': '#double_quoted_string'
@@ -216,6 +226,9 @@
   }
 ]
 'repository':
+  'constants':
+    'match': '(?<=\\s)(true|false|null)(?=\\s*$)'
+    'name': 'constant.language.yaml'
   'erb':
     'begin': '<%+(?!>)=?'
     'beginCaptures':

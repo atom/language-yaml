@@ -11,7 +11,7 @@
   'sublime-syntax'
   'Boxfile'
 ]
-'firstLineMatch': '^#cloud-config'
+'firstLineMatch': '^(#cloud-config|---)'
 'patterns': [
   {
     'include': '#erb'
@@ -19,6 +19,10 @@
   {
     'match': '\\t+'
     'name': 'invalid.illegal.whitespace.yaml'
+  }
+  {
+    'match': '^---'
+    'name': 'punctuation.definition.directives.end.yaml'
   }
   {
     'begin': '^(\\s*)(?!-\\s*)(\\S+\\s*(:))\\s*(\\||>)'

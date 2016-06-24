@@ -419,6 +419,14 @@ describe "YAML grammar", ->
       {tokens} = grammar.tokenizeLine "true: something"
       expect(tokens[0]).toEqual value: "true", scopes: ["source.yaml", "string.unquoted.yaml", "entity.name.tag.yaml"]
 
+  describe "directives", ->
+    it "tokenizes directives end markers", ->
+      {tokens} = grammar.tokenizeLine "---"
+      expect(tokens[0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+      
+      {tokens} = grammar.tokenizeLine " ---"
+      expect(tokens[1]).not.toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+
   describe "tabs", ->
     it "marks them as invalid", ->
       {tokens} = grammar.tokenizeLine "\t\ttabs:"

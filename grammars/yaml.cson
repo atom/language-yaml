@@ -25,14 +25,14 @@
     'name': 'punctuation.definition.directives.end.yaml'
   }
   {
-    'begin': '^(\\s*)(?!-\\s*)(\\S+\\s*(:))\\s*(\\||>)'
+    'begin': '^(\\s*)(?!-\\s*)(\\S+\\s*(:))\\s*(?=\\||>)'
     'beginCaptures':
       '2':
         'name': 'entity.name.tag.yaml'
       '3':
         'name': 'punctuation.separator.key-value.yaml'
-    'end': '^(?!\\1\\s+)(?=\\s*(-|\\S+\\s*:|#))'
-    'name': 'string.unquoted.block.yaml'
+    'end': '^(?!\\1\\s+)(?=\\s*(-|[^!@#%&*>,].*:|#))'
+    'contentName': 'string.unquoted.block.yaml'
     'patterns': [
       {
         'include': '#constants'
@@ -43,18 +43,18 @@
     ]
   }
   {
-    'begin': '^(\\s*)(?:(-)|(?:(-(\\s*))?(\\S+\\s*(:))))\\s*(\\||>)'
+    'begin': '^(\\s*)(?:(-)|(?:(?:(-)\\s*)?(\\S+\\s*(:))))\\s*(?=\\||>)'
     'beginCaptures':
       '2':
         'name': 'punctuation.definition.entry.yaml'
       '3':
         'name': 'punctuation.definition.entry.yaml'
-      '5':
+      '4':
         'name': 'entity.name.tag.yaml'
-      '6':
+      '5':
         'name': 'punctuation.separator.key-value.yaml'
-    'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|\\S+\\s*:|#))'
-    'name': 'string.unquoted.block.yaml'
+    'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|[^!@#%&*>,].*:|#))'
+    'contentName': 'string.unquoted.block.yaml'
     'patterns': [
       {
         'include': '#constants'
@@ -74,11 +74,12 @@
         'name': 'punctuation.separator.key-value.yaml'
       '4':
         'name': 'punctuation.definition.entry.yaml'
-    'match': '(?:(?:(-\\s*)?([^\\s#].*?(:)(?=\\s)))|(-))\\s*((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\s*($|(?=#)(?!#\\{))'
-    'name': 'constant.numeric.yaml'
+      '5':
+        'name': 'constant.numeric.yaml'
+    'match': '(?:(?:(?:(-)\\s*)?([^\\s#].*?(:)(?=\\s)))|(-))\\s*(((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?)\\s*($|(?=#)(?!#{))'
   }
   {
-    'begin': '(?:(?:(-\\s*)?([^\\s#].*?(:)(?=\\s)))|(-))[ \t]*'
+    'begin': '(?:(?:(?:(-)\\s*)?([^\\s#].*?(:)(?=\\s)))|(-))[ ]*'
     'beginCaptures':
       '1':
         'name': 'punctuation.definition.entry.yaml'
@@ -88,11 +89,19 @@
         'name': 'punctuation.separator.key-value.yaml'
       '4':
         'name': 'punctuation.definition.entry.yaml'
-    'end': '$|(?=#)(?!#\\{)'
+    'end': '(?=^\\s*(-|[^!@#%&*>,].*:))'
     'patterns': [
       {
-        'name': 'string.unquoted.yaml'
+        'match': '(?<=^|\\s)((#(?!{)).*)'
+        'captures':
+          '1':
+            'name': 'comment.line.number-sign.yaml'
+          '2':
+            'name': 'punctuation.definition.comment.yaml'
+      }
+      {
         'match': '\\!\\s*'
+        'name': 'string.unquoted.yaml'
       }
       {
         'include': '#constants'
@@ -104,11 +113,10 @@
         'include': '#single_quoted_string'
       }
       {
+        'match': '[^"\'\\n](?!#(?!{))([^#\\n]|((?<!\\s)#))*'
         'name': 'string.unquoted.yaml'
-        'match': '[^"\'#\\n]([^#\\n]|((?<!\\s)#))*'
       }
     ]
-    'name': 'string.unquoted.yaml'
   }
   {
     'captures':

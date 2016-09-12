@@ -30,7 +30,6 @@ describe "YAML grammar", ->
         expect(tokens[4]).toEqual value: "\\\"", scopes: ["source.yaml", "string.quoted.double.yaml", "constant.character.escape.yaml"]
         expect(tokens[5]).toEqual value: "\"", scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]
 
-
         {tokens} = grammar.tokenizeLine("key: \"I am \\\"escaped\\\"\"")
         expect(tokens[0]).toEqual value: "key", scopes: ["source.yaml", "entity.name.tag.yaml"]
         expect(tokens[1]).toEqual value: ":", scopes: ["source.yaml", "entity.name.tag.yaml", "punctuation.separator.key-value.yaml"]
@@ -244,6 +243,12 @@ describe "YAML grammar", ->
           expect(lines[5][0]).toEqual value: "  ", scopes: ["source.yaml", "punctuation.whitespace.comment.leading.yaml"]
           expect(lines[5][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
           expect(lines[5][2]).toEqual value: " hi", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
+
+    it "does not confuse keys and strings", ->
+      {tokens} = grammar.tokenizeLine("- 'Section 2.4: 3, 6abc, 12ab, 30, 32a'")
+      expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+      expect(tokens[2]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
+      expect(tokens[3]).toEqual value: "Section 2.4: 3, 6abc, 12ab, 30, 32a", scopes: ["source.yaml", "string.quoted.single.yaml"]
 
   it "parses the leading ! before values", ->
     {tokens} = grammar.tokenizeLine("key: ! 'hi'")
@@ -460,7 +465,7 @@ describe "YAML grammar", ->
     it "tokenizes directives end markers", ->
       {tokens} = grammar.tokenizeLine "---"
       expect(tokens[0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
-      
+
       {tokens} = grammar.tokenizeLine " ---"
       expect(tokens[1]).not.toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
 

@@ -378,6 +378,12 @@ describe "YAML grammar", ->
     expect(lines[4][0]).toEqual value: "  String", scopes: ["source.yaml", "string.unquoted.yaml"]
     expect(lines[5][0]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
 
+  it "does not confuse keys and comments", ->
+    {tokens} = grammar.tokenizeLine("- Entry 2 # This colon breaks syntax highlighting: see?")
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[3]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+    expect(tokens[4]).toEqual value: " This colon breaks syntax highlighting: see?", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
+
   it "parses colons in key names", ->
     lines = grammar.tokenizeLines """
       colon::colon: 1

@@ -1,6 +1,6 @@
 {
   "name": "language-yaml",
-  "version": "0.27.1",
+  "version": "0.27.2",
   "description": "YAML language support in Atom",
   "engines": {
     "atom": "*",

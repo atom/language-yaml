@@ -110,12 +110,7 @@
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:\\s+))'
     'patterns': [
       {
-        'match': '(?<=^|\\s)((#(?!{)).*)'
-        'captures':
-          '1':
-            'name': 'comment.line.number-sign.yaml'
-          '2':
-            'name': 'punctuation.definition.comment.yaml'
+        'include': '#comment'
       }
       {
         'match': '\\!\\s*'
@@ -166,12 +161,7 @@
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:\\s+))'
     'patterns': [
       {
-        'match': '(?<=^|\\s)((#(?!{)).*)'
-        'captures':
-          '1':
-            'name': 'comment.line.number-sign.yaml'
-          '2':
-            'name': 'punctuation.definition.comment.yaml'
+        'include': '#comment'
       }
       {
         'match': '\\!\\s*'
@@ -204,12 +194,7 @@
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:))'
     'patterns': [
       {
-        'match': '(?<=^|\\s)((#(?!{)).*)'
-        'captures':
-          '1':
-            'name': 'comment.line.number-sign.yaml'
-          '2':
-            'name': 'punctuation.definition.comment.yaml'
+        'include': '#comment'
       }
       {
         'match': '\\!\\s*'
@@ -316,6 +301,13 @@
   }
 ]
 'repository':
+  'comment':
+    'match': '(?<=^|\\s)((#(?!{)).*)'
+    'captures':
+      '1':
+        'name': 'comment.line.number-sign.yaml'
+      '2':
+        'name': 'punctuation.definition.comment.yaml'
   'constants':
     'match': '(?<=\\s)(true|false|null)(?=\\s*$)'
     'name': 'constant.language.yaml'

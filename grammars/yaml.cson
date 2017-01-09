@@ -116,8 +116,8 @@
         'include': '#comment'
       }
       {
-        'match': '\\!\\s*'
-        'name': 'string.unquoted.yaml'
+        'match': '!(?=\\s)'
+        'name': 'punctuation.definition.tag.non-specific.yaml'
       }
       {
         'include': '#constants'
@@ -160,8 +160,8 @@
         'include': '#comment'
       }
       {
-        'match': '\\!\\s*'
-        'name': 'string.unquoted.yaml'
+        'match': '!(?=\\s)'
+        'name': 'punctuation.definition.tag.non-specific.yaml'
       }
       {
         'include': '#constants'
@@ -186,8 +186,8 @@
         'include': '#comment'
       }
       {
-        'match': '\\!\\s*'
-        'name': 'string.unquoted.yaml'
+        'match': '!(?=\\s)'
+        'name': 'punctuation.definition.tag.non-specific.yaml'
       }
       {
         'include': '#constants'
@@ -342,7 +342,7 @@
         ]
       }
       {
-        'match': '[^"\'\\n](?!\\s*#(?!{))([^#\\n]|((?<!\\s)#))*'
+        'match': '[^\\s"\'\\n](?!\\s*#(?!{))([^#\\n]|((?<!\\s)#))*'
         'name': 'string.unquoted.yaml'
       }
     ]

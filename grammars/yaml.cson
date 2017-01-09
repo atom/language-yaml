@@ -98,6 +98,20 @@
     'match': '(?:(?:(?:(-))?\\s*([^!{@#%&*>,\'"][^#\'"]*?)(:))|(-))\\s+(((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?)\\s*($|(?=#)(?!#{))'
   }
   {
+    'captures':
+      '1':
+        'name': 'entity.name.tag.merge.yaml'
+      '2':
+        'name': 'punctuation.separator.key-value.yaml'
+      '3':
+        'patterns': [
+          {
+            'include': '#variables'
+          }
+        ]
+    'match': '(<<)\\s*(:)\\s+(.+)$'
+  }
+  {
     'begin': '(?>^\\s*(-)?\\s*)([^!{@#%&*>,\'"][^#\'"]*?)(:)\\s+((!!)omap)?'
     'beginCaptures':
       '1':
@@ -198,25 +212,10 @@
     ]
   }
   {
-    'captures':
-      '1':
-        'name': 'punctuation.definition.variable.yaml'
-    'match': '(&|\\*)\\w+$'
-    'name': 'variable.other.yaml'
+    'include': '#variables'
   }
   {
     'include': '#strings'
-  }
-  {
-    'captures':
-      '1':
-        'name': 'entity.name.tag.yaml'
-      '2':
-        'name': 'keyword.operator.merge-key.yaml'
-      '3':
-        'name': 'punctuation.definition.keyword.yaml'
-    'match': '(\\<\\<): ((\\*).*)$'
-    'name': 'keyword.operator.merge-key.yaml'
   }
 ]
 'repository':
@@ -322,3 +321,9 @@
         'name': 'string.unquoted.yaml'
       }
     ]
+  'variables':
+    'captures':
+      '1':
+        'name': 'punctuation.definition.variable.yaml'
+    'match': '(&|\\*)\\w+$'
+    'name': 'variable.other.yaml'

@@ -250,7 +250,7 @@ describe "YAML grammar", ->
       expect(tokens[2]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
       expect(tokens[3]).toEqual value: "Section 2.4: 3, 6abc, 12ab, 30, 32a", scopes: ["source.yaml", "string.quoted.single.yaml"]
 
-  it "parses the leading ! before values", ->
+  it "parses the non-specific tag indicator before values", ->
     {tokens} = grammar.tokenizeLine("key: ! 'hi'")
     expect(tokens[0]).toEqual value: "key", scopes: ["source.yaml", "entity.name.tag.yaml"]
     expect(tokens[1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
@@ -474,6 +474,122 @@ describe "YAML grammar", ->
     expect(lines[2][3]).toEqual value: "\"", scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.begin.yaml"]
     expect(lines[2][4]).toEqual value: "3", scopes: ["source.yaml", "string.quoted.double.yaml"]
     expect(lines[2][5]).toEqual value: "\"", scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]
+
+  it "parses the merge-key tag", ->
+    {tokens} = grammar.tokenizeLine "<<: *variable"
+    expect(tokens[0]).toEqual value: "<<", scopes: ["source.yaml", "entity.name.tag.merge.yaml"]
+    expect(tokens[1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[2]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[3]).toEqual value: "*", scopes: ["source.yaml", "variable.other.yaml", "punctuation.definition.variable.yaml"]
+    expect(tokens[4]).toEqual value: "variable", scopes: ["source.yaml", "variable.other.yaml"]
+
+    {tokens} = grammar.tokenizeLine "<< : *variable"
+    expect(tokens[0]).toEqual value: "<<", scopes: ["source.yaml", "entity.name.tag.merge.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[3]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[4]).toEqual value: "*", scopes: ["source.yaml", "variable.other.yaml", "punctuation.definition.variable.yaml"]
+    expect(tokens[5]).toEqual value: "variable", scopes: ["source.yaml", "variable.other.yaml"]
+
+    {tokens} = grammar.tokenizeLine "<<:*variable"
+    expect(tokens[0]).toEqual value: "<<:*variable", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+  it "parses the !!omap directive", ->
+    {tokens} = grammar.tokenizeLine "hello: !!omap"
+    expect(tokens[0]).toEqual value: "hello", scopes: ["source.yaml", "entity.name.tag.yaml"]
+    expect(tokens[1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[2]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[3]).toEqual value: "!!", scopes: ["source.yaml", "keyword.other.omap.yaml", "punctuation.definition.keyword.yaml"]
+    expect(tokens[4]).toEqual value: "omap", scopes: ["source.yaml", "keyword.other.omap.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- 'hello': !!omap"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
+    expect(tokens[3]).toEqual value: "hello", scopes: ["source.yaml", "string.quoted.single.yaml", "entity.name.tag.yaml"]
+    expect(tokens[4]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
+    expect(tokens[5]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[6]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[7]).toEqual value: "!!", scopes: ["source.yaml", "keyword.other.omap.yaml", "punctuation.definition.keyword.yaml"]
+    expect(tokens[8]).toEqual value: "omap", scopes: ["source.yaml", "keyword.other.omap.yaml"]
+
+    {tokens} = grammar.tokenizeLine "hello:!!omap"
+    expect(tokens[0]).toEqual value: "hello:!!omap", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+  it "parses dates in YYYY-MM-DD format", ->
+    {tokens} = grammar.tokenizeLine "- date: 2001-01-01"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "date", scopes: ["source.yaml", "entity.name.tag.yaml"]
+    expect(tokens[3]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[4]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[5]).toEqual value: "2001-01-01", scopes: ["source.yaml", "constant.other.date.yaml"]
+
+    {tokens} = grammar.tokenizeLine "apocalypse: 2012-12-21"
+    expect(tokens[0]).toEqual value: "apocalypse", scopes: ["source.yaml", "entity.name.tag.yaml"]
+    expect(tokens[1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[2]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[3]).toEqual value: "2012-12-21", scopes: ["source.yaml", "constant.other.date.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- 2001-01-01"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "2001-01-01", scopes: ["source.yaml", "constant.other.date.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- 07-04-1776"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "07-04-1776", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- 2001-01-01 uh oh"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "2001-01-01 uh oh", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+  it "parses numbers", ->
+    {tokens} = grammar.tokenizeLine "- meaning of life: 42"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "meaning of life", scopes: ["source.yaml", "entity.name.tag.yaml"]
+    expect(tokens[3]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[4]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[5]).toEqual value: "42", scopes: ["source.yaml", "constant.numeric.yaml"]
+
+    {tokens} = grammar.tokenizeLine "hex: 0x726Fa"
+    expect(tokens[0]).toEqual value: "hex", scopes: ["source.yaml", "entity.name.tag.yaml"]
+    expect(tokens[1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[2]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[3]).toEqual value: "0x726Fa", scopes: ["source.yaml", "constant.numeric.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- 0.7e-9001"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "0.7e-9001", scopes: ["source.yaml", "constant.numeric.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- 3.14 uh oh"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "3.14 uh oh", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+  describe "variables", ->
+    it "tokenizes them", ->
+      {tokens} = grammar.tokenizeLine "&variable"
+      expect(tokens[0]).toEqual value: "&", scopes: ["source.yaml", "variable.other.yaml", "punctuation.definition.variable.yaml"]
+      expect(tokens[1]).toEqual value: "variable", scopes: ["source.yaml", "variable.other.yaml"]
+
+      {tokens} = grammar.tokenizeLine "*variable"
+      expect(tokens[0]).toEqual value: "*", scopes: ["source.yaml", "variable.other.yaml", "punctuation.definition.variable.yaml"]
+      expect(tokens[1]).toEqual value: "variable", scopes: ["source.yaml", "variable.other.yaml"]
+
+      {tokens} = grammar.tokenizeLine "&v3ryc001"
+      expect(tokens[0]).toEqual value: "&", scopes: ["source.yaml", "variable.other.yaml", "punctuation.definition.variable.yaml"]
+      expect(tokens[1]).toEqual value: "v3ryc001", scopes: ["source.yaml", "variable.other.yaml"]
+
+      {tokens} = grammar.tokenizeLine "& variable"
+      expect(tokens[0]).toEqual value: "& variable", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+      {tokens} = grammar.tokenizeLine "&variable hey"
+      expect(tokens[0]).toEqual value: "&variable hey", scopes: ["source.yaml", "string.unquoted.yaml"]
 
   describe "constants", ->
     it "tokenizes true, false, and null as constants", ->

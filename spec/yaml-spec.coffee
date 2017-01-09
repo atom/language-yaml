@@ -240,7 +240,7 @@ describe "YAML grammar", ->
           expect(lines[2][0]).toEqual value: "    content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
           expect(lines[3][0]).toEqual value: "", scopes: ["source.yaml", "string.unquoted.block.yaml"]
           expect(lines[4][0]).toEqual value: "    second line", scopes: ["source.yaml", "string.unquoted.block.yaml"]
-          expect(lines[5][0]).toEqual value: "  ", scopes: ["source.yaml", "punctuation.whitespace.comment.leading.yaml"]
+          expect(lines[5][0]).toEqual value: "  ", scopes: ["source.yaml"]
           expect(lines[5][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
           expect(lines[5][2]).toEqual value: " hi", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
 
@@ -342,7 +342,7 @@ describe "YAML grammar", ->
     expect(lines[0][0]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
     expect(lines[0][1]).toEqual value: " first: 1", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
 
-    expect(lines[1][0]).toEqual value: "  ", scopes: ["source.yaml", "punctuation.whitespace.comment.leading.yaml"]
+    expect(lines[1][0]).toEqual value: "  ", scopes: ["source.yaml"]
     expect(lines[1][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
     expect(lines[1][2]).toEqual value: " second", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
 

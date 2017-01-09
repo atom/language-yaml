@@ -19,6 +19,9 @@
     'include': '#erb'
   }
   {
+    'include': '#comment'
+  }
+  {
     'match': '\\t+'
     'name': 'invalid.illegal.whitespace.yaml'
   }
@@ -120,14 +123,7 @@
         'include': '#constants'
       }
       {
-        'include': '#double_quoted_string'
-      }
-      {
-        'include': '#single_quoted_string'
-      }
-      {
-        'match': '[^"\'\\n](?!#(?!{))([^#\\n]|((?<!\\s)#))*'
-        'name': 'string.unquoted.yaml'
+        'include': '#strings'
       }
     ]
   }
@@ -171,14 +167,7 @@
         'include': '#constants'
       }
       {
-        'include': '#double_quoted_string'
-      }
-      {
-        'include': '#single_quoted_string'
-      }
-      {
-        'match': '[^"\'\\n](?!#(?!{))([^#\\n]|((?<!\\s)#))*'
-        'name': 'string.unquoted.yaml'
+        'include': '#strings'
       }
     ]
   }
@@ -204,14 +193,7 @@
         'include': '#constants'
       }
       {
-        'include': '#double_quoted_string'
-      }
-      {
-        'include': '#single_quoted_string'
-      }
-      {
-        'match': '[^"\'\\n](?!#(?!{))([^#\\n]|((?<!\\s)#))*'
-        'name': 'string.unquoted.yaml'
+        'include': '#strings'
       }
     ]
   }
@@ -223,10 +205,7 @@
     'name': 'variable.other.yaml'
   }
   {
-    'include': '#double_quoted_string'
-  }
-  {
-    'include': '#single_quoted_string'
+    'include': '#strings'
   }
   {
     'begin': '`'
@@ -262,23 +241,6 @@
     'disabled': '1'
     'match': '( |\t)+$'
     'name': 'invalid.deprecated.trailing-whitespace.yaml'
-  }
-  {
-    'begin': '(^[ \\t]+)?(?<!\\$)(?<=^|[ \\t])(?=#)(?!#{)'
-    'beginCaptures':
-      '1':
-        'name': 'punctuation.whitespace.comment.leading.yaml'
-    'end': '(?!\\G)'
-    'patterns': [
-      {
-        'begin': '#'
-        'beginCaptures':
-          '0':
-            'name': 'punctuation.definition.comment.yaml'
-        'end': '\\n'
-        'name': 'comment.line.number-sign.yaml'
-      }
-    ]
   }
   {
     'match': '-'
@@ -339,39 +301,48 @@
   'escaped_char':
     'match': '\\\\.'
     'name': 'constant.character.escape.yaml'
-  'double_quoted_string':
-    'begin': '"'
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.string.begin.yaml'
-    'end': '"'
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.string.end.yaml'
-    'name': 'string.quoted.double.yaml'
+  'strings':
     'patterns': [
       {
-        'include': '#escaped_char'
+        'begin': '"'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.yaml'
+        'end': '"'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.yaml'
+        'name': 'string.quoted.double.yaml'
+        'patterns': [
+          {
+            'include': '#escaped_char'
+          }
+          {
+            'include': '#erb'
+          }
+        ]
       }
       {
-        'include': '#erb'
+        'begin': '\''
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.yaml'
+        'end': '\''
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.yaml'
+        'name': 'string.quoted.single.yaml'
+        'patterns': [
+          {
+            'include': '#escaped_char'
+          }
+          {
+            'include': '#erb'
+          }
+        ]
       }
-    ]
-  'single_quoted_string':
-    'begin': '\''
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.string.begin.yaml'
-    'end': '\''
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.string.end.yaml'
-    'name': 'string.quoted.single.yaml'
-    'patterns': [
       {
-        'include': '#escaped_char'
-      }
-      {
-        'include': '#erb'
+        'match': '[^"\'\\n](?!\\s*#(?!{))([^#\\n]|((?<!\\s)#))*'
+        'name': 'string.unquoted.yaml'
       }
     ]

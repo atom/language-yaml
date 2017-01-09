@@ -294,6 +294,7 @@ describe "YAML grammar", ->
       first: 1st
       second: 2nd
       third: th{ree}
+      fourth:invalid
     """
 
     expect(lines[0][0]).toEqual value: "first", scopes: ["source.yaml", "entity.name.tag.yaml"]
@@ -310,6 +311,8 @@ describe "YAML grammar", ->
     expect(lines[2][1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
     expect(lines[2][2]).toEqual value: " ", scopes: ["source.yaml"]
     expect(lines[2][3]).toEqual value: "th{ree}", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+    expect(lines[3][0]).toEqual value: "fourth:invalid", scopes: ["source.yaml", "string.unquoted.yaml"]
 
   it "parses quoted keys", ->
     lines = grammar.tokenizeLines """
@@ -404,6 +407,11 @@ describe "YAML grammar", ->
     expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
     expect(tokens[3]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
     expect(tokens[4]).toEqual value: " This colon breaks syntax highlighting: see?", scopes: ["source.yaml", "comment.line.number-sign.yaml"]
+
+  it "does not confuse keys and unquoted strings", ->
+    {tokens} = grammar.tokenizeLine("- { role: common }")
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[2]).toEqual value: "{ role: common }", scopes: ["source.yaml", "string.unquoted.yaml"]
 
   it "parses colons in key names", ->
     lines = grammar.tokenizeLines """

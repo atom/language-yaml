@@ -208,25 +208,6 @@
     'include': '#strings'
   }
   {
-    'begin': '`'
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.string.begin.yaml'
-    'end': '`'
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.string.end.yaml'
-    'name': 'string.interpolated.yaml'
-    'patterns': [
-      {
-        'include': '#escaped_char'
-      }
-      {
-        'include': '#erb'
-      }
-    ]
-  }
-  {
     'captures':
       '1':
         'name': 'entity.name.tag.yaml'
@@ -332,6 +313,25 @@
           '0':
             'name': 'punctuation.definition.string.end.yaml'
         'name': 'string.quoted.single.yaml'
+        'patterns': [
+          {
+            'include': '#escaped_char'
+          }
+          {
+            'include': '#erb'
+          }
+        ]
+      }
+      {
+        'begin': '`'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.yaml'
+        'end': '`'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.yaml'
+        'name': 'string.interpolated.yaml'
         'patterns': [
           {
             'include': '#escaped_char'

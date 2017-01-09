@@ -218,30 +218,6 @@
     'match': '(\\<\\<): ((\\*).*)$'
     'name': 'keyword.operator.merge-key.yaml'
   }
-  {
-    'disabled': '1'
-    'match': '( |\t)+$'
-    'name': 'invalid.deprecated.trailing-whitespace.yaml'
-  }
-  {
-    'match': '-'
-    'name': 'keyword.operator.symbol'
-  }
-  {
-    'begin': '^(?=\\t)'
-    'end': '(?=[^\\t])'
-    'name': 'meta.leading-tabs.yaml'
-    'patterns': [
-      {
-        'captures':
-          '1':
-            'name': 'meta.odd-tab'
-          '2':
-            'name': 'meta.even-tab'
-        'match': '(\\t)(\\t)?'
-      }
-    ]
-  }
 ]
 'repository':
   'comment':

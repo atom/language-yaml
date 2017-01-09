@@ -311,6 +311,27 @@ describe "YAML grammar", ->
     expect(lines[2][2]).toEqual value: " ", scopes: ["source.yaml"]
     expect(lines[2][3]).toEqual value: "th{ree}", scopes: ["source.yaml", "string.unquoted.yaml"]
 
+  it "parses quoted keys", ->
+    lines = grammar.tokenizeLines """
+      'G@role:deployer':
+        - deployer
+    """
+
+    expect(lines[0][0]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
+    expect(lines[0][1]).toEqual value: "G@role:deployer", scopes: ["source.yaml", "string.quoted.single.yaml", "entity.name.tag.yaml"]
+    expect(lines[0][2]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
+    expect(lines[0][3]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+
+    lines = grammar.tokenizeLines """
+      "G@role:deployer":
+        - deployer
+    """
+
+    expect(lines[0][0]).toEqual value: '"', scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.begin.yaml"]
+    expect(lines[0][1]).toEqual value: "G@role:deployer", scopes: ["source.yaml", "string.quoted.double.yaml", "entity.name.tag.yaml"]
+    expect(lines[0][2]).toEqual value: '"', scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]
+    expect(lines[0][3]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+
   it "parses comments at the beginning of lines", ->
     lines = grammar.tokenizeLines """
       # first: 1

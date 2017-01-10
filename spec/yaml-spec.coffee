@@ -499,7 +499,7 @@ describe "YAML grammar", ->
     expect(tokens[0]).toEqual value: "hello", scopes: ["source.yaml", "entity.name.tag.yaml"]
     expect(tokens[1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
     expect(tokens[2]).toEqual value: " ", scopes: ["source.yaml"]
-    expect(tokens[3]).toEqual value: "!!", scopes: ["source.yaml", "keyword.other.omap.yaml", "punctuation.definition.keyword.yaml"]
+    expect(tokens[3]).toEqual value: "!!", scopes: ["source.yaml", "keyword.other.omap.yaml", "punctuation.definition.tag.omap.yaml"]
     expect(tokens[4]).toEqual value: "omap", scopes: ["source.yaml", "keyword.other.omap.yaml"]
 
     {tokens} = grammar.tokenizeLine "- 'hello': !!omap"
@@ -510,7 +510,7 @@ describe "YAML grammar", ->
     expect(tokens[4]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
     expect(tokens[5]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
     expect(tokens[6]).toEqual value: " ", scopes: ["source.yaml"]
-    expect(tokens[7]).toEqual value: "!!", scopes: ["source.yaml", "keyword.other.omap.yaml", "punctuation.definition.keyword.yaml"]
+    expect(tokens[7]).toEqual value: "!!", scopes: ["source.yaml", "keyword.other.omap.yaml", "punctuation.definition.tag.omap.yaml"]
     expect(tokens[8]).toEqual value: "omap", scopes: ["source.yaml", "keyword.other.omap.yaml"]
 
     {tokens} = grammar.tokenizeLine "hello:!!omap"

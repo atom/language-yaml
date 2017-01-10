@@ -105,7 +105,7 @@
       '4':
         'name': 'keyword.other.omap.yaml'
       '5':
-        'name': 'punctuation.definition.keyword.yaml'
+        'name': 'punctuation.definition.tag.omap.yaml'
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:\\s+))'
     'patterns': [
       {
@@ -142,7 +142,7 @@
       '11':
         'name': 'keyword.other.omap.yaml'
       '12':
-        'name': 'punctuation.definition.keyword.yaml'
+        'name': 'punctuation.definition.tag.omap.yaml'
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:\\s+))'
     'patterns': [
       {
@@ -161,7 +161,7 @@
       '2':
         'name': 'keyword.other.omap.yaml'
       '3':
-        'name': 'punctuation.definition.keyword.yaml'
+        'name': 'punctuation.definition.tag.omap.yaml'
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:))'
     'patterns': [
       {

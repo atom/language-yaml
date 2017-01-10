@@ -30,6 +30,8 @@
     'name': 'punctuation.definition.directives.end.yaml'
   }
   {
+    # hello: >
+    # hello: |
     'begin': '^(\\s*)(?!-\\s*)(\\S+)\\s*(:)\\s*(?=\\||>)'
     'beginCaptures':
       '2':
@@ -48,6 +50,10 @@
     ]
   }
   {
+    # - >
+    # - |
+    # - hello: >
+    # - hello: |
     'begin': '^(\\s*)(?:(-)|(?:(?:(-)\\s*)?(\\S+)\\s*(:)))\\s*(?=\\||>)'
     'beginCaptures':
       '2':
@@ -70,6 +76,8 @@
     ]
   }
   {
+    # << : *variableToMerge
+    'match': '(<<)\\s*(:)\\s+(.+)$'
     'captures':
       '1':
         'name': 'entity.name.tag.merge.yaml'
@@ -81,9 +89,11 @@
             'include': '#variables'
           }
         ]
-    'match': '(<<)\\s*(:)\\s+(.+)$'
   }
   {
+    # - hello:
+    # look at me go:
+    # omap time: !!omap
     'begin': '(?>^\\s*(-)?\\s*)([^!{@#%&*>,\'"][^#\'"]*?)(:)\\s+((!!)omap)?'
     'beginCaptures':
       '1':
@@ -104,6 +114,9 @@
     ]
   }
   {
+    # - 'quoted':
+    # "quoted":
+    # "with omap": !!omap
     'begin': '(-)?\\s*(?:((\')([^\']*?)(\'))|((")([^"]*?)(")))(:)\\s+((!!)omap)?'
     'beginCaptures':
       '1':
@@ -138,6 +151,9 @@
     ]
   }
   {
+    # - stuff
+    # - !!omap
+    # -
     'begin': '(-)\\s+(?:((!!)omap)|(?![!@#%&*>,]))'
     'beginCaptures':
       '1':

@@ -72,34 +72,6 @@
   {
     'captures':
       '1':
-        'name': 'punctuation.definition.entry.yaml'
-      '2':
-        'name': 'entity.name.tag.yaml'
-      '3':
-        'name': 'punctuation.separator.key-value.yaml'
-      '4':
-        'name': 'punctuation.definition.entry.yaml'
-      '5':
-        'name': 'constant.other.date.yaml'
-    'match': '(?:(?:(-)?\\s*([^!{@#%&*>,\'"][^#\'"]*?)(:))|(-))\\s+([0-9]{4}-[0-9]{2}-[0-9]{2})\\s*($|(?=#)(?!#{))'
-  }
-  {
-    'captures':
-      '1':
-        'name': 'punctuation.definition.entry.yaml'
-      '2':
-        'name': 'entity.name.tag.yaml'
-      '3':
-        'name': 'punctuation.separator.key-value.yaml'
-      '4':
-        'name': 'punctuation.definition.entry.yaml'
-      '5':
-        'name': 'constant.numeric.yaml'
-    'match': '(?:(?:(?:(-))?\\s*([^!{@#%&*>,\'"][^#\'"]*?)(:))|(-))\\s+(((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?)\\s*($|(?=#)(?!#{))'
-  }
-  {
-    'captures':
-      '1':
         'name': 'entity.name.tag.merge.yaml'
       '2':
         'name': 'punctuation.separator.key-value.yaml'
@@ -135,6 +107,12 @@
       }
       {
         'include': '#constants'
+      }
+      {
+        'include': '#date'
+      }
+      {
+        'include': '#numeric'
       }
       {
         'include': '#strings'
@@ -181,6 +159,12 @@
         'include': '#constants'
       }
       {
+        'include': '#date'
+      }
+      {
+        'include': '#numeric'
+      }
+      {
         'include': '#strings'
       }
     ]
@@ -207,6 +191,12 @@
         'include': '#constants'
       }
       {
+        'include': '#date'
+      }
+      {
+        'include': '#numeric'
+      }
+      {
         'include': '#strings'
       }
     ]
@@ -229,6 +219,11 @@
   'constants':
     'match': '(?<=\\s)(true|false|null)(?=\\s*$)'
     'name': 'constant.language.yaml'
+  'date':
+    'match': '([0-9]{4}-[0-9]{2}-[0-9]{2})\\s*($|(?=#)(?!#{))'
+    'captures':
+      '1':
+        'name': 'constant.other.date.yaml'
   'erb':
     'begin': '<%+(?!>)=?'
     'beginCaptures':
@@ -257,6 +252,11 @@
   'escaped_char':
     'match': '\\\\.'
     'name': 'constant.character.escape.yaml'
+  'numeric':
+    'match': '(((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?)\\s*($|(?=#)(?!#{))'
+    'captures':
+      '1':
+        'name': 'constant.numeric.yaml'
   'strings':
     'patterns': [
       {

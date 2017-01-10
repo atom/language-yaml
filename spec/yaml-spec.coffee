@@ -531,6 +531,22 @@ describe "YAML grammar", ->
     expect(tokens[2]).toEqual value: " ", scopes: ["source.yaml"]
     expect(tokens[3]).toEqual value: "2012-12-21", scopes: ["source.yaml", "constant.other.date.yaml"]
 
+    {tokens} = grammar.tokenizeLine "'the apocalypse is nigh': 2012-12-21"
+    expect(tokens[0]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
+    expect(tokens[1]).toEqual value: "the apocalypse is nigh", scopes: ["source.yaml", "string.quoted.single.yaml", "entity.name.tag.yaml"]
+    expect(tokens[2]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
+    expect(tokens[3]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[4]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[5]).toEqual value: "2012-12-21", scopes: ["source.yaml", "constant.other.date.yaml"]
+
+    lines = grammar.tokenizeLines """
+      multiline:
+        - 2001-01-01
+        2001-01-01
+    """
+    expect(lines[1][3]).toEqual value: "2001-01-01", scopes: ["source.yaml", "constant.other.date.yaml"]
+    expect(lines[2][1]).toEqual value: "2001-01-01", scopes: ["source.yaml", "constant.other.date.yaml"]
+
     {tokens} = grammar.tokenizeLine "- 2001-01-01"
     expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
     expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
@@ -540,6 +556,11 @@ describe "YAML grammar", ->
     expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
     expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
     expect(tokens[2]).toEqual value: "07-04-1776", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- nope 2001-01-01"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "nope 2001-01-01", scopes: ["source.yaml", "string.unquoted.yaml"]
 
     {tokens} = grammar.tokenizeLine "- 2001-01-01 uh oh"
     expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
@@ -565,6 +586,27 @@ describe "YAML grammar", ->
     expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
     expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
     expect(tokens[2]).toEqual value: "0.7e-9001", scopes: ["source.yaml", "constant.numeric.yaml"]
+
+    {tokens} = grammar.tokenizeLine "'over 9000': 9001"
+    expect(tokens[0]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
+    expect(tokens[1]).toEqual value: "over 9000", scopes: ["source.yaml", "string.quoted.single.yaml", "entity.name.tag.yaml"]
+    expect(tokens[2]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
+    expect(tokens[3]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+    expect(tokens[4]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[5]).toEqual value: "9001", scopes: ["source.yaml", "constant.numeric.yaml"]
+
+    lines = grammar.tokenizeLines """
+      multiline:
+        - 3.14f
+        3.14f
+    """
+    expect(lines[1][3]).toEqual value: "3.14f", scopes: ["source.yaml", "constant.numeric.yaml"]
+    expect(lines[2][1]).toEqual value: "3.14f", scopes: ["source.yaml", "constant.numeric.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- pi 3.14"
+    expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(tokens[1]).toEqual value: " ", scopes: ["source.yaml"]
+    expect(tokens[2]).toEqual value: "pi 3.14", scopes: ["source.yaml", "string.unquoted.yaml"]
 
     {tokens} = grammar.tokenizeLine "- 3.14 uh oh"
     expect(tokens[0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]

@@ -99,23 +99,7 @@
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:\\s+))'
     'patterns': [
       {
-        'include': '#comment'
-      }
-      {
-        'match': '!(?=\\s)'
-        'name': 'punctuation.definition.tag.non-specific.yaml'
-      }
-      {
-        'include': '#constants'
-      }
-      {
-        'include': '#date'
-      }
-      {
-        'include': '#numeric'
-      }
-      {
-        'include': '#strings'
+        'include': '#scalar-content'
       }
     ]
   }
@@ -149,23 +133,7 @@
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:\\s+))'
     'patterns': [
       {
-        'include': '#comment'
-      }
-      {
-        'match': '!(?=\\s)'
-        'name': 'punctuation.definition.tag.non-specific.yaml'
-      }
-      {
-        'include': '#constants'
-      }
-      {
-        'include': '#date'
-      }
-      {
-        'include': '#numeric'
-      }
-      {
-        'include': '#strings'
+        'include': '#scalar-content'
       }
     ]
   }
@@ -181,23 +149,7 @@
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:))'
     'patterns': [
       {
-        'include': '#comment'
-      }
-      {
-        'match': '!(?=\\s)'
-        'name': 'punctuation.definition.tag.non-specific.yaml'
-      }
-      {
-        'include': '#constants'
-      }
-      {
-        'include': '#date'
-      }
-      {
-        'include': '#numeric'
-      }
-      {
-        'include': '#strings'
+        'include': '#scalar-content'
       }
     ]
   }
@@ -319,6 +271,28 @@
       {
         'match': '[^\\s"\'\\n](?!\\s*#(?!{))([^#\\n]|((?<!\\s)#))*'
         'name': 'string.unquoted.yaml'
+      }
+    ]
+  'scalar-content':
+    'patterns': [
+      {
+        'include': '#comment'
+      }
+      {
+        'match': '!(?=\\s)'
+        'name': 'punctuation.definition.tag.non-specific.yaml'
+      }
+      {
+        'include': '#constants'
+      }
+      {
+        'include': '#date'
+      }
+      {
+        'include': '#numeric'
+      }
+      {
+        'include': '#strings'
       }
     ]
   'variables':

@@ -16,6 +16,10 @@
 'firstLineMatch': '^(#cloud-config|---)'
 'patterns': [
   {
+    # JSON is YAML
+    'include': 'source.json'
+  }
+  {
     'include': '#erb'
   }
   {

@@ -32,12 +32,16 @@
   {
     # hello: >
     # hello: |
-    'begin': '^(\\s*)(?!-\\s*)(\\S+)\\s*(:)\\s*(?=\\||>)'
+    'begin': '^(\\s*)(?!-\\s*)(\\S+)\\s*(:)(?:\\s+((!)[^!\\s]+))?\\s+(?=\\||>)'
     'beginCaptures':
       '2':
         'name': 'entity.name.tag.yaml'
       '3':
         'name': 'punctuation.separator.key-value.yaml'
+      '4':
+        'name': 'keyword.other.tag.local.yaml'
+      '5':
+        'name': 'punctuation.definition.tag.local.yaml'
     'end': '^(?!\\1\\s+)(?=\\s*(-|[^!@#%&*>,].*:|#))'
     'contentName': 'string.unquoted.block.yaml'
     'patterns': [
@@ -54,7 +58,7 @@
     # - |
     # - hello: >
     # - hello: |
-    'begin': '^(\\s*)(?:(-)|(?:(?:(-)\\s*)?(\\S+)\\s*(:)))\\s*(?=\\||>)'
+    'begin': '^(\\s*)(?:(-)|(?:(?:(-)\\s*)?(\\S+)\\s*(:)))(?:\\s+((!)[^!\\s]+))?\\s+(?=\\||>)'
     'beginCaptures':
       '2':
         'name': 'punctuation.definition.entry.yaml'
@@ -64,6 +68,10 @@
         'name': 'entity.name.tag.yaml'
       '5':
         'name': 'punctuation.separator.key-value.yaml'
+      '6':
+        'name': 'keyword.other.tag.local.yaml'
+      '7':
+        'name': 'punctuation.definition.tag.local.yaml'
     'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|[^!@#%&*>,].*:|#))'
     'contentName': 'string.unquoted.block.yaml'
     'patterns': [
@@ -154,7 +162,7 @@
     # - stuff
     # - !!omap
     # -
-    'begin': '(-)\\s+(?:((!!)omap)|(?![!@#%&*>,]))'
+    'begin': '(-)\\s+(?:((!!)omap)|((!)[^!\\s]+)|(?![!@#%&*>,]))'
     'beginCaptures':
       '1':
         'name': 'punctuation.definition.entry.yaml'
@@ -162,6 +170,10 @@
         'name': 'keyword.other.omap.yaml'
       '3':
         'name': 'punctuation.definition.tag.omap.yaml'
+      '4':
+        'name': 'keyword.other.tag.local.yaml'
+      '5':
+        'name': 'punctuation.definition.tag.local.yaml'
     'end': '(?=^\\s*(-|[^!{@#%&*>,].*:))'
     'patterns': [
       {

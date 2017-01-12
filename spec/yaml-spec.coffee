@@ -494,6 +494,22 @@ describe "YAML grammar", ->
     {tokens} = grammar.tokenizeLine "<<:*variable"
     expect(tokens[0]).toEqual value: "<<:*variable", scopes: ["source.yaml", "string.unquoted.yaml"]
 
+  it "parses local tags", ->
+    {tokens} = grammar.tokenizeLine "multiline: !something >"
+    expect(tokens[3]).toEqual value: "!", scopes: ["source.yaml", "keyword.other.tag.local.yaml", "punctuation.definition.tag.local.yaml"]
+    expect(tokens[4]).toEqual value: "something", scopes: ["source.yaml", "keyword.other.tag.local.yaml"]
+    expect(tokens[6]).toEqual value: ">", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- !tag"
+    expect(tokens[2]).toEqual value: "!", scopes: ["source.yaml", "keyword.other.tag.local.yaml", "punctuation.definition.tag.local.yaml"]
+    expect(tokens[3]).toEqual value: "tag", scopes: ["source.yaml", "keyword.other.tag.local.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- !"
+    expect(tokens[0]).toEqual value: "- !", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+    {tokens} = grammar.tokenizeLine "- !!"
+    expect(tokens[0]).toEqual value: "- !!", scopes: ["source.yaml", "string.unquoted.yaml"]
+
   it "parses the !!omap directive", ->
     {tokens} = grammar.tokenizeLine "hello: !!omap"
     expect(tokens[0]).toEqual value: "hello", scopes: ["source.yaml", "entity.name.tag.yaml"]

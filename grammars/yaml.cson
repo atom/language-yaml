@@ -259,18 +259,21 @@
         ]
       }
       {
-        'begin': '\''
+        # Per http://www.yaml.org/spec/1.2/spec.html#id2788097, only single quotes can be escaped
+        'begin': "'"
         'beginCaptures':
           '0':
             'name': 'punctuation.definition.string.begin.yaml'
-        'end': '\''
+        'end': "'"
         'endCaptures':
           '0':
             'name': 'punctuation.definition.string.end.yaml'
         'name': 'string.quoted.single.yaml'
+        'applyEndPatternLast': true
         'patterns': [
           {
-            'include': '#escaped_char'
+            'match': "''"
+            'name': 'constant.character.escape.yaml'
           }
           {
             'include': '#erb'

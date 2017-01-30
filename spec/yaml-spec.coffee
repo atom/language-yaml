@@ -41,26 +41,40 @@ describe "YAML grammar", ->
         expect(tokens[7]).toEqual value: "\\\"", scopes: ["source.yaml", "string.quoted.double.yaml", "constant.character.escape.yaml"]
         expect(tokens[8]).toEqual value: "\"", scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]
 
+      it "parses other escape characters", ->
+        {tokens} = grammar.tokenizeLine("\"I am \\escaped\"")
+        expect(tokens[0]).toEqual value: "\"", scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.begin.yaml"]
+        expect(tokens[1]).toEqual value: "I am ", scopes: ["source.yaml", "string.quoted.double.yaml"]
+        expect(tokens[2]).toEqual value: "\\e", scopes: ["source.yaml", "string.quoted.double.yaml", "constant.character.escape.yaml"]
+        expect(tokens[3]).toEqual value: "scaped", scopes: ["source.yaml", "string.quoted.double.yaml"]
+        expect(tokens[4]).toEqual value: "\"", scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]
+
     describe "single quoted", ->
-      it "parses escaped quotes", ->
-        {tokens} = grammar.tokenizeLine("'I am \\'escaped\\''")
+      it "parses escaped single quotes", ->
+        {tokens} = grammar.tokenizeLine("'I am ''escaped'''")
         expect(tokens[0]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
         expect(tokens[1]).toEqual value: "I am ", scopes: ["source.yaml", "string.quoted.single.yaml"]
-        expect(tokens[2]).toEqual value: "\\'", scopes: ["source.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
+        expect(tokens[2]).toEqual value: "''", scopes: ["source.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
         expect(tokens[3]).toEqual value: "escaped", scopes: ["source.yaml", "string.quoted.single.yaml"]
-        expect(tokens[4]).toEqual value: "\\'", scopes: ["source.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
+        expect(tokens[4]).toEqual value: "''", scopes: ["source.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
         expect(tokens[5]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
 
-        {tokens} = grammar.tokenizeLine("key: 'I am \\'escaped\\''")
+        {tokens} = grammar.tokenizeLine("key: 'I am ''escaped'''")
         expect(tokens[0]).toEqual value: "key", scopes: ["source.yaml", "entity.name.tag.yaml"]
         expect(tokens[1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
         expect(tokens[2]).toEqual value: " ", scopes: ["source.yaml"]
         expect(tokens[3]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
         expect(tokens[4]).toEqual value: "I am ", scopes: ["source.yaml", "string.quoted.single.yaml"]
-        expect(tokens[5]).toEqual value: "\\'", scopes: ["source.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
+        expect(tokens[5]).toEqual value: "''", scopes: ["source.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
         expect(tokens[6]).toEqual value: "escaped", scopes: ["source.yaml", "string.quoted.single.yaml"]
-        expect(tokens[7]).toEqual value: "\\'", scopes: ["source.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
+        expect(tokens[7]).toEqual value: "''", scopes: ["source.yaml", "string.quoted.single.yaml", "constant.character.escape.yaml"]
         expect(tokens[8]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
+
+      it "does not recognize backslashes as escape characters", ->
+        {tokens} = grammar.tokenizeLine("'I am not \\escaped'")
+        expect(tokens[0]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.begin.yaml"]
+        expect(tokens[1]).toEqual value: "I am not \\escaped", scopes: ["source.yaml", "string.quoted.single.yaml"]
+        expect(tokens[2]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
 
     describe "text blocks", ->
       it "parses simple content", ->

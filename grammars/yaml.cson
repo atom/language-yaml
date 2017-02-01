@@ -30,6 +30,9 @@
     'name': 'punctuation.definition.directives.end.yaml'
   }
   {
+    'include': '#mapping'
+  }
+  {
     # hello: >
     # hello: |
     'begin': '^(\\s*)(?!-\\s*)(\\S+)\\s*(:)(?:\\s+((!)[^!\\s]+))?\\s+(?=\\||>)'
@@ -232,6 +235,160 @@
   'escaped_char':
     'match': '\\\\.'
     'name': 'constant.character.escape.yaml'
+  'mapping':
+    'begin': '{'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.mapping.begin.yaml'
+    'end': '}'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.mapping.end.yaml'
+    'name': 'meta.mapping.yaml'
+    'patterns': [
+      {
+        'include': '#mapping'
+      }
+      {
+        'begin': '([^!{@#%&*>,\'"][^#\'"]*?)(:)'
+        'beginCaptures':
+          '1':
+            'name': 'entity.name.tag.yaml'
+          '2':
+            'name': 'punctuation.separator.key-value.yaml'
+        'end': ',|(?=})'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.separator.yaml'
+        'patterns': [
+          {
+            'include': '#mapping-scalar-content'
+          }
+        ]
+      }
+      {
+        'begin': '(?:((\')([^\']*?)(\'))|((")([^"]*?)(")))(:)'
+        'beginCaptures':
+          '1':
+            'name': 'string.quoted.single.yaml'
+          '2':
+            'name': 'punctuation.definition.string.begin.yaml'
+          '3':
+            'name': 'entity.name.tag.yaml'
+          '4':
+            'name': 'punctuation.definition.string.end.yaml'
+          '5':
+            'name': 'string.quoted.double.yaml'
+          '6':
+            'name': 'punctuation.definition.string.begin.yaml'
+          '7':
+            'name': 'entity.name.tag.yaml'
+          '8':
+            'name': 'punctuation.definition.string.end.yaml'
+          '9':
+            'name': 'punctuation.separator.key-value.yaml'
+        'end': ',|(?=})'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.separator.yaml'
+        'patterns': [
+          {
+            'include': '#mapping-scalar-content'
+          }
+        ]
+      }
+    ]
+  'mapping-scalar-content':
+    'patterns': [
+      # This is mostly the same thing as scalar-content, but with an extra (?=[,}]) lookahead added at the end of each rule
+      {
+        'match': '!(?=\\s)'
+        'name': 'punctuation.definition.tag.non-specific.yaml'
+      }
+      {
+        'include': '#mapping'
+      }
+      {
+        'match': '(?<=\\s)(true|false|null)(?=\\s*($|[,}]))'
+        'name': 'constant.language.yaml'
+      }
+      {
+        'match': '([0-9]{4}-[0-9]{2}-[0-9]{2})(?=\\s*($|[,}]))'
+        'captures':
+          '1':
+            'name': 'constant.other.date.yaml'
+      }
+      {
+        'match': '(((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?)(?=\\s*($|[,}]))'
+        'captures':
+          '1':
+            'name': 'constant.numeric.yaml'
+      }
+      {
+        'begin': '"'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.yaml'
+        'end': '"'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.yaml'
+        'name': 'string.quoted.double.yaml'
+        'patterns': [
+          {
+            'include': '#escaped_char'
+          }
+          {
+            'include': '#erb'
+          }
+        ]
+      }
+      {
+        # Per http://www.yaml.org/spec/1.2/spec.html#id2788097, only single quotes can be escaped
+        'begin': "'"
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.yaml'
+        'end': "'"
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.yaml'
+        'name': 'string.quoted.single.yaml'
+        'applyEndPatternLast': true
+        'patterns': [
+          {
+            'match': "''"
+            'name': 'constant.character.escape.yaml'
+          }
+          {
+            'include': '#erb'
+          }
+        ]
+      }
+      {
+        'begin': '`'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.yaml'
+        'end': '`'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.yaml'
+        'name': 'string.interpolated.yaml'
+        'patterns': [
+          {
+            'include': '#escaped_char'
+          }
+          {
+            'include': '#erb'
+          }
+        ]
+      }
+      {
+        'match': '[^\\s"\'\\n](?!\\s*#(?!{))([^,{}#\\n]|((?<!\\s)#))*'
+        'name': 'string.unquoted.yaml'
+      }
+    ]
   'numeric':
     'match': '(((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?)\\s*($|(?=#)(?!#{))'
     'captures':
@@ -312,6 +469,9 @@
       {
         'match': '!(?=\\s)'
         'name': 'punctuation.definition.tag.non-specific.yaml'
+      }
+      {
+        'include': '#mapping'
       }
       {
         'include': '#constants'

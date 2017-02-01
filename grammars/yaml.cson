@@ -250,7 +250,7 @@
         'include': '#mapping'
       }
       {
-        'begin': '([^!{@#%&*>,\'"][^#\'"]*?)(:)'
+        'begin': '([^!{@#%&*>,\'"][^#\'"]*?)(:)\\s+'
         'beginCaptures':
           '1':
             'name': 'entity.name.tag.yaml'
@@ -267,6 +267,7 @@
         ]
       }
       {
+        # JSON-like: no spaces are needed after the key
         'begin': '(?:((\')([^\']*?)(\'))|((")([^"]*?)(")))(:)'
         'beginCaptures':
           '1':

@@ -10,6 +10,7 @@
   'yml'
   'yml.erb'
   'sls'
+  'stylelintrc'
   'sublime-syntax'
   'Boxfile'
 ]

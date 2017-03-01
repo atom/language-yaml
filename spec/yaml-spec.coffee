@@ -684,13 +684,35 @@ describe "YAML grammar", ->
       {tokens} = grammar.tokenizeLine "true: something"
       expect(tokens[0]).toEqual value: "true", scopes: ["source.yaml", "entity.name.tag.yaml"]
 
-  describe "directives", ->
+  describe "structures", ->
     it "tokenizes directives end markers", ->
       {tokens} = grammar.tokenizeLine "---"
       expect(tokens[0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
 
       {tokens} = grammar.tokenizeLine " ---"
       expect(tokens[1]).not.toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+
+    it "tokenizes document end markers", ->
+      {tokens} = grammar.tokenizeLine "..."
+      expect(tokens[0]).toEqual value: "...", scopes: ["source.yaml", "punctuation.definition.document.end.yaml"]
+
+    it "tokenizes structures in an actual YAML document", ->
+      lines = grammar.tokenizeLines """
+        ---
+        time: 20:03:20
+        player: Sammy Sosa
+        action: strike (miss)
+        ...
+        ---
+        time: 20:03:47
+        player: Sammy Sosa
+        action: grand slam
+        ...
+      """
+      expect(lines[0][0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+      expect(lines[4][0]).toEqual value: "...", scopes: ["source.yaml", "punctuation.definition.document.end.yaml"]
+      expect(lines[5][0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+      expect(lines[9][0]).toEqual value: "...", scopes: ["source.yaml", "punctuation.definition.document.end.yaml"]
 
   describe "tabs", ->
     it "marks them as invalid", ->

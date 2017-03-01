@@ -572,7 +572,7 @@ describe "YAML grammar", ->
     lines = grammar.tokenizeLines """
       multiline:
         - 2001-01-01
-        2001-01-01
+          2001-01-01
     """
     expect(lines[1][3]).toEqual value: "2001-01-01", scopes: ["source.yaml", "constant.other.date.yaml"]
     expect(lines[2][1]).toEqual value: "2001-01-01", scopes: ["source.yaml", "constant.other.date.yaml"]
@@ -628,7 +628,7 @@ describe "YAML grammar", ->
     lines = grammar.tokenizeLines """
       multiline:
         - 3.14f
-        3.14f
+          3.14f
     """
     expect(lines[1][3]).toEqual value: "3.14f", scopes: ["source.yaml", "constant.numeric.yaml"]
     expect(lines[2][1]).toEqual value: "3.14f", scopes: ["source.yaml", "constant.numeric.yaml"]

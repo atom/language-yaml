@@ -572,7 +572,7 @@ describe "YAML grammar", ->
     lines = grammar.tokenizeLines """
       multiline:
         - 2001-01-01
-        2001-01-01
+          2001-01-01
     """
     expect(lines[1][3]).toEqual value: "2001-01-01", scopes: ["source.yaml", "constant.other.date.yaml"]
     expect(lines[2][1]).toEqual value: "2001-01-01", scopes: ["source.yaml", "constant.other.date.yaml"]
@@ -628,7 +628,7 @@ describe "YAML grammar", ->
     lines = grammar.tokenizeLines """
       multiline:
         - 3.14f
-        3.14f
+          3.14f
     """
     expect(lines[1][3]).toEqual value: "3.14f", scopes: ["source.yaml", "constant.numeric.yaml"]
     expect(lines[2][1]).toEqual value: "3.14f", scopes: ["source.yaml", "constant.numeric.yaml"]
@@ -684,13 +684,35 @@ describe "YAML grammar", ->
       {tokens} = grammar.tokenizeLine "true: something"
       expect(tokens[0]).toEqual value: "true", scopes: ["source.yaml", "entity.name.tag.yaml"]
 
-  describe "directives", ->
+  describe "structures", ->
     it "tokenizes directives end markers", ->
       {tokens} = grammar.tokenizeLine "---"
       expect(tokens[0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
 
       {tokens} = grammar.tokenizeLine " ---"
       expect(tokens[1]).not.toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+
+    it "tokenizes document end markers", ->
+      {tokens} = grammar.tokenizeLine "..."
+      expect(tokens[0]).toEqual value: "...", scopes: ["source.yaml", "punctuation.definition.document.end.yaml"]
+
+    it "tokenizes structures in an actual YAML document", ->
+      lines = grammar.tokenizeLines """
+        ---
+        time: 20:03:20
+        player: Sammy Sosa
+        action: strike (miss)
+        ...
+        ---
+        time: 20:03:47
+        player: Sammy Sosa
+        action: grand slam
+        ...
+      """
+      expect(lines[0][0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+      expect(lines[4][0]).toEqual value: "...", scopes: ["source.yaml", "punctuation.definition.document.end.yaml"]
+      expect(lines[5][0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+      expect(lines[9][0]).toEqual value: "...", scopes: ["source.yaml", "punctuation.definition.document.end.yaml"]
 
   describe "tabs", ->
     it "marks them as invalid", ->

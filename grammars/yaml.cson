@@ -31,6 +31,10 @@
     'name': 'punctuation.definition.directives.end.yaml'
   }
   {
+    'match': '^\\.\\.\\.'
+    'name': 'punctuation.definition.document.end.yaml'
+  }
+  {
     # hello: >
     # hello: |
     'begin': '^(\\s*)(?!-\\s*)(\\S+)\\s*(:)(?:\\s+((!)[^!\\s]+))?\\s+(?=\\||>)'
@@ -43,7 +47,7 @@
         'name': 'keyword.other.tag.local.yaml'
       '5':
         'name': 'punctuation.definition.tag.local.yaml'
-    'end': '^(?!\\1\\s+)(?=\\s*(-|[^!@#%&*>,].*:|#))'
+    'end': '^(((?!$)(?!\\1\\s+))|(?=\\1\\s*(-|[^!@#%&*>,].*:\\s+)))'
     'contentName': 'string.unquoted.block.yaml'
     'patterns': [
       {
@@ -73,7 +77,7 @@
         'name': 'keyword.other.tag.local.yaml'
       '7':
         'name': 'punctuation.definition.tag.local.yaml'
-    'end': '^(?!\\1 \\4\\s+)(?=\\s*(-|[^!@#%&*>,].*:|#))'
+    'end': '^(((?!$)(?!\\1\\s+))|(?=\\1\\s*(-|[^!@#%&*>,].*:\\s+)))'
     'contentName': 'string.unquoted.block.yaml'
     'patterns': [
       {
@@ -103,19 +107,19 @@
     # - hello:
     # look at me go:
     # omap time: !!omap
-    'begin': '(?>^\\s*(-)?\\s*)([^!{@#%&*>,\'"][^#\'"]*?)(:)\\s+((!!)omap)?'
+    'begin': '(?>^(\\s*)(-)?\\s*)([^!{@#%&*>,\'"][^#\'"]*?)(:)\\s+((!!)omap)?'
     'beginCaptures':
-      '1':
-        'name': 'punctuation.definition.entry.yaml'
       '2':
-        'name': 'entity.name.tag.yaml'
+        'name': 'punctuation.definition.entry.yaml'
       '3':
-        'name': 'punctuation.separator.key-value.yaml'
+        'name': 'entity.name.tag.yaml'
       '4':
-        'name': 'keyword.other.omap.yaml'
+        'name': 'punctuation.separator.key-value.yaml'
       '5':
+        'name': 'keyword.other.omap.yaml'
+      '6':
         'name': 'punctuation.definition.tag.omap.yaml'
-    'end': '(?=^\\s*(-|[^!{@#%&*>,].*:\\s+))'
+    'end': '^((?!\\1\\s+)|(?=\\1\\s*(-|[^!@#%&*>,].*:\\s+|#)))'
     'patterns': [
       {
         'include': '#scalar-content'
@@ -126,33 +130,33 @@
     # - 'quoted':
     # "quoted":
     # "with omap": !!omap
-    'begin': '(-)?\\s*(?:((\')([^\']*?)(\'))|((")([^"]*?)(")))(:)\\s+((!!)omap)?'
+    'begin': '^(\\s*)(-)?\\s*(?:((\')([^\']*?)(\'))|((")([^"]*?)(")))(:)\\s+((!!)omap)?'
     'beginCaptures':
-      '1':
-        'name': 'punctuation.definition.entry.yaml'
       '2':
-        'name': 'string.quoted.single.yaml'
+        'name': 'punctuation.definition.entry.yaml'
       '3':
-        'name': 'punctuation.definition.string.begin.yaml'
+        'name': 'string.quoted.single.yaml'
       '4':
-        'name': 'entity.name.tag.yaml'
-      '5':
-        'name': 'punctuation.definition.string.end.yaml'
-      '6':
-        'name': 'string.quoted.double.yaml'
-      '7':
         'name': 'punctuation.definition.string.begin.yaml'
-      '8':
+      '5':
         'name': 'entity.name.tag.yaml'
-      '9':
+      '6':
         'name': 'punctuation.definition.string.end.yaml'
+      '7':
+        'name': 'string.quoted.double.yaml'
+      '8':
+        'name': 'punctuation.definition.string.begin.yaml'
+      '9':
+        'name': 'entity.name.tag.yaml'
       '10':
-        'name': 'punctuation.separator.key-value.yaml'
+        'name': 'punctuation.definition.string.end.yaml'
       '11':
-        'name': 'keyword.other.omap.yaml'
+        'name': 'punctuation.separator.key-value.yaml'
       '12':
+        'name': 'keyword.other.omap.yaml'
+      '13':
         'name': 'punctuation.definition.tag.omap.yaml'
-    'end': '(?=^\\s*(-|[^!{@#%&*>,].*:\\s+))'
+    'end': '^((?!\\1\\s+)|(?=\\1\\s*(-|[^!@#%&*>,].*:\\s+|#)))'
     'patterns': [
       {
         'include': '#scalar-content'
@@ -163,19 +167,19 @@
     # - stuff
     # - !!omap
     # -
-    'begin': '(-)\\s+(?:((!!)omap)|((!)[^!\\s]+)|(?![!@#%&*>,]))'
+    'begin': '^(\\s*)(-)\\s+(?:((!!)omap)|((!)[^!\\s]+)|(?![!@#%&*>,]))'
     'beginCaptures':
-      '1':
-        'name': 'punctuation.definition.entry.yaml'
       '2':
-        'name': 'keyword.other.omap.yaml'
+        'name': 'punctuation.definition.entry.yaml'
       '3':
-        'name': 'punctuation.definition.tag.omap.yaml'
+        'name': 'keyword.other.omap.yaml'
       '4':
-        'name': 'keyword.other.tag.local.yaml'
+        'name': 'punctuation.definition.tag.omap.yaml'
       '5':
+        'name': 'keyword.other.tag.local.yaml'
+      '6':
         'name': 'punctuation.definition.tag.local.yaml'
-    'end': '(?=^\\s*(-|[^!{@#%&*>,].*:))'
+    'end': '^((?!\\1\\s+)|(?=\\1\\s*(-|[^!@#%&*>,].*:\\s+|#)))'
     'patterns': [
       {
         'include': '#scalar-content'

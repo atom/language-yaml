@@ -109,6 +109,74 @@ describe "YAML grammar", ->
         expect(tokens[1]).toEqual value: "I am not \\escaped", scopes: ["source.yaml", "string.quoted.single.yaml"]
         expect(tokens[2]).toEqual value: "'", scopes: ["source.yaml", "string.quoted.single.yaml", "punctuation.definition.string.end.yaml"]
 
+  describe "non-scalars", ->
+    it "tokenizes one non-scalar and everything else as invalid", ->
+      lines = grammar.tokenizeLines """
+        look at me
+        oh no error:
+      """
+      expect(lines[0][0]).toEqual value: "look at me", scopes: ["source.yaml", "string.unquoted.yaml"]
+      expect(lines[1][0]).toEqual value: "oh no error:", scopes: ["source.yaml", "invalid.illegal.content-after-non-scalar.yaml"]
+
+    it "tokenizes the non-scalar when it is on the same line as the directive end marker", ->
+      lines = grammar.tokenizeLines """
+        --- look at me
+        oh no error:
+      """
+      expect(lines[0][0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+      expect(lines[0][2]).toEqual value: "look at me", scopes: ["source.yaml", "string.unquoted.yaml"]
+      expect(lines[1][0]).toEqual value: "oh no error:", scopes: ["source.yaml", "invalid.illegal.content-after-non-scalar.yaml"]
+
+    it "tokenizes the non-scalar when it is on the same line as the directive end marker", ->
+      lines = grammar.tokenizeLines """
+        ---look at me
+        oh no error:
+      """
+      expect(lines[0][0]).toEqual value: "---look at me", scopes: ["source.yaml", "string.unquoted.yaml"]
+      expect(lines[1][0]).toEqual value: "oh no error:", scopes: ["source.yaml", "invalid.illegal.content-after-non-scalar.yaml"]
+
+    it "tokenizes non-scalars as invalid after the first scalar is encountered", ->
+      lines = grammar.tokenizeLines """
+        key: value
+        oh no error
+      """
+      expect(lines[0][0]).toEqual value: "key", scopes: ["source.yaml", "entity.name.tag.yaml"]
+      expect(lines[0][3]).toEqual value: "value", scopes: ["source.yaml", "string.unquoted.yaml"]
+      expect(lines[1][0]).toEqual value: "oh no error", scopes: ["source.yaml", "invalid.illegal.not-a-scalar.yaml"]
+
+    it "resets when a document end marker is reached", ->
+      lines = grammar.tokenizeLines """
+        ---
+        look at me
+        oh no error:
+        ...
+        look at me
+        oh no error:
+      """
+      expect(lines[0][0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+      expect(lines[1][0]).toEqual value: "look at me", scopes: ["source.yaml", "string.unquoted.yaml"]
+      expect(lines[2][0]).toEqual value: "oh no error:", scopes: ["source.yaml", "invalid.illegal.content-after-non-scalar.yaml"]
+      expect(lines[3][0]).toEqual value: "...", scopes: ["source.yaml", "punctuation.definition.document.end.yaml"]
+      expect(lines[4][0]).toEqual value: "look at me", scopes: ["source.yaml", "string.unquoted.yaml"]
+      expect(lines[5][0]).toEqual value: "oh no error:", scopes: ["source.yaml", "invalid.illegal.content-after-non-scalar.yaml"]
+
+      lines = grammar.tokenizeLines """
+        ---
+        key: value
+        oh no error
+        ...
+        key: value
+        oh no error
+      """
+      expect(lines[0][0]).toEqual value: "---", scopes: ["source.yaml", "punctuation.definition.directives.end.yaml"]
+      expect(lines[1][0]).toEqual value: "key", scopes: ["source.yaml", "entity.name.tag.yaml"]
+      expect(lines[1][3]).toEqual value: "value", scopes: ["source.yaml", "string.unquoted.yaml"]
+      expect(lines[2][0]).toEqual value: "oh no error", scopes: ["source.yaml", "invalid.illegal.not-a-scalar.yaml"]
+      expect(lines[3][0]).toEqual value: "...", scopes: ["source.yaml", "punctuation.definition.document.end.yaml"]
+      expect(lines[4][0]).toEqual value: "key", scopes: ["source.yaml", "entity.name.tag.yaml"]
+      expect(lines[4][3]).toEqual value: "value", scopes: ["source.yaml", "string.unquoted.yaml"]
+      expect(lines[5][0]).toEqual value: "oh no error", scopes: ["source.yaml", "invalid.illegal.not-a-scalar.yaml"]
+
   describe "text blocks", ->
     it "parses simple content", ->
       lines = grammar.tokenizeLines """
@@ -700,7 +768,7 @@ describe "YAML grammar", ->
       expect(tokens[3]).toEqual value: "*", scopes: ["source.yaml", "variable.other.alias.yaml", "punctuation.definition.alias.yaml"]
       expect(tokens[4]).toEqual value: "variable", scopes: ["source.yaml", "variable.other.alias.yaml"]
       expect(tokens[5]).toEqual value: " ", scopes: ["source.yaml"]
-      expect(tokens[6]).toEqual value: "hey", scopes: ["source.yaml", "invalid.illegal.alias-cannot-have-content.yaml"]
+      expect(tokens[6]).toEqual value: "hey", scopes: ["source.yaml", "invalid.illegal.content-after-alias.yaml"]
 
   describe "constants", ->
     it "tokenizes true, false, and null as constants", ->
@@ -754,6 +822,39 @@ describe "YAML grammar", ->
       expect(lines[9][0]).toEqual value: "...", scopes: ["source.yaml", "punctuation.definition.document.end.yaml"]
 
   describe "tabs", ->
-    it "marks them as invalid", ->
+    it "tokenizes tabs used as indentation as invalid", ->
       {tokens} = grammar.tokenizeLine "\t\ttabs:"
-      expect(tokens[0]).toEqual value: '\t\t', scopes: ['source.yaml', 'invalid.illegal.whitespace.yaml']
+      expect(tokens[0]).toEqual value: "\t\t", scopes: ["source.yaml", "invalid.illegal.whitespace.yaml"]
+
+      {tokens} = grammar.tokenizeLine "  \ttabs:"
+      expect(tokens[0]).toEqual value: "  ", scopes: ["source.yaml"]
+      expect(tokens[1]).toEqual value: "\t", scopes: ["source.yaml", "invalid.illegal.whitespace.yaml"]
+
+      {tokens} = grammar.tokenizeLine "  \t  \ttabs:"
+      expect(tokens[0]).toEqual value: "  ", scopes: ["source.yaml"]
+      expect(tokens[1]).toEqual value: "\t", scopes: ["source.yaml", "invalid.illegal.whitespace.yaml"]
+      expect(tokens[2]).toEqual value: "  ", scopes: ["source.yaml"]
+      expect(tokens[3]).toEqual value: "\t", scopes: ["source.yaml", "invalid.illegal.whitespace.yaml"]
+
+      lines = grammar.tokenizeLines """
+        multiline: a
+          \ttab
+      """
+      expect(lines[1][1]).toEqual value: "\t", scopes: ["source.yaml", "invalid.illegal.whitespace.yaml"]
+
+    it "does not tokenize tabs in values as invalid", ->
+      {tokens} = grammar.tokenizeLine "key: \tvalue1\tvalue2"
+      expect(tokens[2]).toEqual value: " \t", scopes: ["source.yaml"]
+      expect(tokens[3]).toEqual value: "value1\tvalue2", scopes: ["source.yaml", "string.unquoted.yaml"]
+
+    it "does not tokenize trailing tabs as invalid", ->
+      {tokens} = grammar.tokenizeLine "hi\t"
+      expect(tokens[1]).toEqual value: "\t", scopes: ["source.yaml"]
+
+    it "does not tokenize tabs in explicit multiline scalars as invalid", ->
+      lines = grammar.tokenizeLines """
+        multiline: >
+          one
+          \ttwo
+      """
+      expect(lines[2][0]).toEqual value: "  \ttwo", scopes: ["source.yaml", "string.unquoted.block.yaml"]

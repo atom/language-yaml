@@ -17,10 +17,20 @@
 ]
 'firstLineMatch': '^(#cloud-config|---)'
 'injections':
-  'L:source.yaml':
+  'L:source.yaml - string.unquoted.block.yaml':
     'patterns': [
       {
-        'match': '^\\t+'
+        'match': '^\\s*?(\\t+)'
+        'captures':
+          '1':
+            'name': 'invalid.illegal.whitespace.yaml'
+      }
+    ]
+  'source.yaml - (string.unquoted.yaml | string.unquoted.block.yaml)':
+    'patterns': [
+      {
+        # Captures any leading whitespace that the first pattern missed
+        'match': '\\t+(?!\\s*$)'
         'name': 'invalid.illegal.whitespace.yaml'
       }
     ]
@@ -37,7 +47,7 @@
     'name': 'punctuation.definition.document.end.yaml'
   }
   {
-    'begin': '^(?:(---)\\s+)?(?=\\s*+[^{\\[@#%&*>,:-][^:]*$)' # For a simple string without scalars
+    'begin': '^(?:(---)\\s+)?(?=\\s*+(?!-\\s+)[^{\\[@#%&*>,:][^:]*$)' # Possible non-scalar
     'beginCaptures':
       '1':
         'name': 'punctuation.definition.directives.end.yaml'
@@ -57,8 +67,8 @@
         'include': '#common'
       }
       {
-        'match': '.+' # Anything past the first string is invalid
-        'name': 'invalid.illegal.only-one-bare-string-allowed.yaml'
+        'match': '.+' # Anything past the first non-scalar is invalid
+        'name': 'invalid.illegal.content-after-non-scalar.yaml'
       }
     ]
   }
@@ -215,7 +225,7 @@
       }
       {
         'begin': '(?=[^\\s"\'\\n])'
-        'end': '(?=\\s+#|$)'
+        'end': '(?=\\s+(#|$))'
         'name': 'string.unquoted.yaml'
       }
     ]
@@ -423,6 +433,6 @@
           '2':
             'name': 'punctuation.definition.alias.yaml'
           '3':
-            'name': 'invalid.illegal.alias-cannot-have-content.yaml'
+            'name': 'invalid.illegal.content-after-alias.yaml'
       }
     ]

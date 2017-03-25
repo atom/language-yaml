@@ -387,7 +387,7 @@
         'include': '#common'
       }
       {
-        'match': '\\S.+' # Bare strings not allowed
+        'match': '\\S.+' # Non-scalars not allowed
         'name': 'invalid.illegal.not-a-scalar.yaml'
       }
     ]

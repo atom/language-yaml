@@ -707,6 +707,27 @@ describe "YAML grammar", ->
       {tokens} = grammar.tokenizeLine "key: null"
       expect(tokens[3]).toEqual value: "null", scopes: ["source.yaml", "constant.language.yaml"]
 
+      {tokens} = grammar.tokenizeLine "key: True"
+      expect(tokens[3]).toEqual value: "True", scopes: ["source.yaml", "constant.language.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: False"
+      expect(tokens[3]).toEqual value: "False", scopes: ["source.yaml", "constant.language.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: Null"
+      expect(tokens[3]).toEqual value: "Null", scopes: ["source.yaml", "constant.language.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: TRUE"
+      expect(tokens[3]).toEqual value: "TRUE", scopes: ["source.yaml", "constant.language.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: FALSE"
+      expect(tokens[3]).toEqual value: "FALSE", scopes: ["source.yaml", "constant.language.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: NULL"
+      expect(tokens[3]).toEqual value: "NULL", scopes: ["source.yaml", "constant.language.yaml"]
+
+      {tokens} = grammar.tokenizeLine "key: ~"
+      expect(tokens[3]).toEqual value: "~", scopes: ["source.yaml", "constant.language.yaml"]
+
       {tokens} = grammar.tokenizeLine "key: true$"
       expect(tokens[3]).toEqual value: "true$", scopes: ["source.yaml", "string.unquoted.yaml"]
 

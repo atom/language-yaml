@@ -203,7 +203,7 @@
       '2':
         'name': 'punctuation.definition.comment.yaml'
   'constants':
-    'match': '(?<=\\s)(true|false|null)(?=\\s*$)'
+    'match': '(?<=\\s)(true|false|null|True|False|Null|TRUE|FALSE|NULL|~)(?=\\s*$)'
     'name': 'constant.language.yaml'
   'date':
     'match': '([0-9]{4}-[0-9]{2}-[0-9]{2})\\s*($|(?=#)(?!#{))'

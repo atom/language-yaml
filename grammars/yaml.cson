@@ -108,7 +108,7 @@
     # - hello:
     # look at me go:
     # omap time: !!omap
-    'begin': '(?>^(\\s*)(-)?\\s*)([^!{@#%&*>,\'"][^#\'"]*?)(:)\\s+((!!)omap)?'
+    'begin': '(?>^(\\s*)(-)?\\s*)([^!{@#%&*>,\'"][^#]*?)(:)\\s+((!!)omap)?'
     'beginCaptures':
       '2':
         'name': 'punctuation.definition.entry.yaml'

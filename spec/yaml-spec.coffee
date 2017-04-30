@@ -191,6 +191,20 @@ describe "YAML grammar", ->
         expect(lines[2][3]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
         expect(lines[3][1]).toEqual value: "content here", scopes: ["source.yaml", "string.unquoted.yaml"]
 
+      it "parses keys with spaces", ->
+        lines = grammar.tokenizeLines """
+        a space: |
+          content here
+        more than one space: >
+          content here
+        """
+        expect(lines[0][0]).toEqual value: "a space", scopes: ["source.yaml", "entity.name.tag.yaml"]
+        expect(lines[0][1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+        expect(lines[1][0]).toEqual value: "  content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[2][0]).toEqual value: "more than one space", scopes: ["source.yaml", "entity.name.tag.yaml"]
+        expect(lines[2][1]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+        expect(lines[3][0]).toEqual value: "  content here", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+
       it "properly parses through pound signs in blocks", ->
         lines = grammar.tokenizeLines """
         key: |

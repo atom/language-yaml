@@ -251,7 +251,7 @@
         'name': 'constant.character.escape.yaml'
       }
       {
-        'match': '\\\\[0abtnvfre "/\\N_LP]' # Space is intentional
+        'match': '\\\\[0abtnvfre "/\\\\N_LP]' # Space is intentional
         'name': 'constant.character.escape.yaml'
       }
       {

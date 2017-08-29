@@ -196,12 +196,12 @@
 ]
 'repository':
   'comment':
-    'match': '(?<=^|\\s)((#(?!{)).*)'
-    'captures':
-      '1':
-        'name': 'comment.line.number-sign.yaml'
-      '2':
+    'begin': '(?<=^|\\s)#(?!{)'
+    'beginCaptures':
+      '0':
         'name': 'punctuation.definition.comment.yaml'
+    'end': '$'
+    'name': 'comment.line.number-sign.yaml'
   'constants':
     'match': '(?<=\\s)(true|false|null|True|False|Null|TRUE|FALSE|NULL|~)(?=\\s*$)'
     'name': 'constant.language.yaml'

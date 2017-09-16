@@ -265,6 +265,18 @@ describe "YAML grammar", ->
         expect(lines[3][3]).toEqual value: " ", scopes: ["source.yaml"]
         expect(lines[3][4]).toEqual value: "following text", scopes: ["source.yaml", "string.unquoted.yaml"]
 
+      it "ignores key-like structures in block content", ->
+        lines = grammar.tokenizeLines """
+        - textblock: >
+            am i a key: nope
+            text
+        """
+        expect(lines[0][0]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+        expect(lines[0][2]).toEqual value: "textblock", scopes: ["source.yaml", "entity.name.tag.yaml"]
+        expect(lines[0][3]).toEqual value: ":", scopes: ["source.yaml", "punctuation.separator.key-value.yaml"]
+        expect(lines[1][0]).toEqual value: "    am i a key: nope", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+        expect(lines[2][0]).toEqual value: "    text", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+
       it "parses content even when not using | or >", ->
         lines = grammar.tokenizeLines """
         - textblock:
@@ -534,6 +546,27 @@ describe "YAML grammar", ->
     expect(lines[2][1]).toEqual value: "Ditto", scopes: ["source.yaml", "string.unquoted.yaml"]
     expect(lines[3][1]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
     expect(lines[4][1]).toEqual value: "String", scopes: ["source.yaml", "string.unquoted.yaml"]
+    expect(lines[5][0]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+
+  it "parses comments on the same line as a multiline tag", ->
+    {tokens} = grammar.tokenizeLine "# condition: >"
+    expect(tokens[0]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+
+    {tokens} = grammar.tokenizeLine "condition: > # comment"
+    expect(tokens[4]).toEqual value: "#", scopes: ["source.yaml", "string.unquoted.block.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
+
+  it "ignores comments in proper multiline tags", ->
+    lines = grammar.tokenizeLines """
+      multiline: >
+        This should still be a string # not a comment!
+        Ditto
+        # Guess what this is
+        String
+      # comment
+    """
+
+    expect(lines[1][0]).toEqual value: "  This should still be a string # not a comment!", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+    expect(lines[3][0]).toEqual value: "  # Guess what this is", scopes: ["source.yaml", "string.unquoted.block.yaml"]
     expect(lines[5][0]).toEqual value: "#", scopes: ["source.yaml", "comment.line.number-sign.yaml", "punctuation.definition.comment.yaml"]
 
   it "does not confuse keys and comments", ->

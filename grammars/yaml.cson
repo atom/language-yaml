@@ -38,7 +38,7 @@
   {
     # hello: >
     # hello: |
-    'begin': '^(\\s*)(?!-\\s*)(.*\\S)\\s*(:)(?:\\s+((!)[^!\\s]+))?\\s+(?=\\||>)'
+    'begin': '^(\\s*)(?!-\\s*)([^!@#%&*>,][^#]*\\S)\\s*(:)(?:\\s+((!)[^!\\s]+))?\\s+(?=\\||>)'
     'beginCaptures':
       '2':
         'name': 'entity.name.tag.yaml'
@@ -48,9 +48,19 @@
         'name': 'keyword.other.tag.local.yaml'
       '5':
         'name': 'punctuation.definition.tag.local.yaml'
-    'end': '^(((?!$)(?!\\1\\s+))|(?=\\1\\s*(-|[^!@#%&*>,].*:\\s+)))'
+    'end': '^(?!$)(?!\\1\\s+)'
     'contentName': 'string.unquoted.block.yaml'
     'patterns': [
+      {
+        # Comments can only appear on the same line as the tag name
+        'begin': '\\G'
+        'end': '$'
+        'patterns': [
+          {
+            'include': '#comment'
+          }
+        ]
+      }
       {
         'include': '#constants'
       }
@@ -64,23 +74,33 @@
     # - |
     # - hello: >
     # - hello: |
-    'begin': '^(\\s*)(?:(-)|(?:(?:(-)\\s*)?(.*\\S)\\s*(:)))(?:\\s+((!)[^!\\s]+))?\\s+(?=\\||>)'
+    'begin': '^(\\s*)(?:(-)|(?:(?:(-)(\\s*))?([^!@#%&*>,][^#]*\\S)\\s*(:)))(?:\\s+((!)[^!\\s]+))?\\s+(?=\\||>)'
     'beginCaptures':
       '2':
         'name': 'punctuation.definition.entry.yaml'
       '3':
         'name': 'punctuation.definition.entry.yaml'
-      '4':
-        'name': 'entity.name.tag.yaml'
       '5':
-        'name': 'punctuation.separator.key-value.yaml'
+        'name': 'entity.name.tag.yaml'
       '6':
-        'name': 'keyword.other.tag.local.yaml'
+        'name': 'punctuation.separator.key-value.yaml'
       '7':
+        'name': 'keyword.other.tag.local.yaml'
+      '8':
         'name': 'punctuation.definition.tag.local.yaml'
-    'end': '^(((?!$)(?!\\1\\s+))|(?=\\1\\s*(-|[^!@#%&*>,].*:\\s+)))'
+    'end': '^((?!$)(?!\\1\\s+)|(?=\\s\\4(-|[^\\s!@#%&*>,].*:\\s+)))'
     'contentName': 'string.unquoted.block.yaml'
     'patterns': [
+      {
+        # Comments can only appear on the same line as the tag name
+        'begin': '\\G'
+        'end': '$'
+        'patterns': [
+          {
+            'include': '#comment'
+          }
+        ]
+      }
       {
         'include': '#constants'
       }

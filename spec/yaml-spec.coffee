@@ -435,6 +435,23 @@ describe "YAML grammar", ->
     expect(lines[3][5]).toEqual value: "4th", scopes: ["source.yaml", "string.quoted.double.yaml"]
     expect(lines[3][6]).toEqual value: "\"", scopes: ["source.yaml", "string.quoted.double.yaml", "punctuation.definition.string.end.yaml"]
 
+  it "parses multiple blocks", ->
+    lines = grammar.tokenizeLines """
+      stuff:
+        - long_string: |-
+          hello
+          hello
+        - second_string:
+          - key: b
+    """
+
+    expect(lines[1][1]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(lines[1][3]).toEqual value: "long_string", scopes: ["source.yaml", "entity.name.tag.yaml"]
+    expect(lines[2][0]).toEqual value: "    hello", scopes: ["source.yaml", "string.unquoted.block.yaml"]
+    expect(lines[4][1]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+    expect(lines[4][3]).toEqual value: "second_string", scopes: ["source.yaml", "entity.name.tag.yaml"]
+    expect(lines[5][1]).toEqual value: "-", scopes: ["source.yaml", "punctuation.definition.entry.yaml"]
+
   it "parses keys and values", ->
     lines = grammar.tokenizeLines """
       first: 1st

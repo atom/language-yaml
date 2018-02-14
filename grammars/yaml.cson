@@ -281,10 +281,33 @@
       }
     ]
   'numeric':
-    'match': '(((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?)\\s*($|(?=#)(?!#{))'
-    'captures':
-      '1':
-        'name': 'constant.numeric.yaml'
+    # http://www.yaml.org/spec/1.2/spec.html#id2805071
+    'patterns': [
+      {
+        'match': '[-+]?[0-9]+(?=\\s*($|#(?!#{)))'
+        'name': 'constant.numeric.integer.yaml'
+      }
+      {
+        'match': '0o[0-7]+(?=\\s*($|#(?!#{)))'
+        'name': 'constant.numeric.octal.yaml'
+      }
+      {
+        'match': '0x[0-9a-fA-F]+(?=\\s*($|#(?!#{)))'
+        'name': 'constant.numeric.hexadecimal.yaml'
+      }
+      {
+        'match': '[-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)([eE][-+]?[0-9]+)?(?=\\s*($|#(?!#{)))'
+        'name': 'constant.numeric.float.yaml'
+      }
+      {
+        'match': '[-+]?(\.inf|\.Inf|\.INF)(?=\\s*($|#(?!#{)))'
+        'name': 'constant.numeric.float.yaml'
+      }
+      {
+        'match': '(\.nan|\.NaN|\.NAN)(?=\\s*($|#(?!#{)))'
+        'name': 'constant.numeric.float.yaml'
+      }
+    ]
   'strings':
     'patterns': [
       {

@@ -16,7 +16,7 @@
   'Boxfile'
   'ksy'
 ]
-'firstLineMatch': '^(#cloud-config|---)'
+'firstLineMatch': '^#cloud-config'
 'patterns': [
   {
     'include': '#erb'
